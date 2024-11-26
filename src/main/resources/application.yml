@@ -2,3 +2,8 @@
 spring:
   application:
     name: iot-platform
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: iot-platform

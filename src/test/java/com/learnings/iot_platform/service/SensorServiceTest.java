@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -47,5 +48,15 @@ public class SensorServiceTest {
         SensorResponseDto sensorResponseDto = sensorService.getSensorById(sensorId);
 
         assertEquals(sensorId, sensorResponseDto.getSensorId());
+    }
+
+    @Test
+    void givenInvalidSensorId_whenGettingSensor_thenReturnNull() {
+        String invalidSensorId = "invalidSensorId";
+        when(sensorRepository.findById(invalidSensorId)).thenReturn(Optional.empty());
+
+        SensorResponseDto sensorResponseDto = sensorService.getSensorById(invalidSensorId);
+
+        assertNull(sensorResponseDto);
     }
 }

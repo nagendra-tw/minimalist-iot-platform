@@ -23,6 +23,9 @@ public class SensorService {
 
     public SensorResponseDto getSensorById(String sensorId) {
         Sensor sensor = sensorRepository.findById(sensorId).orElse(null);
+        if (sensor == null) {
+            return null;
+        }
         return convertSensorToSensorResponse(sensor);
     }
 

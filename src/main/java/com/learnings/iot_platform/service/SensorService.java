@@ -1,6 +1,7 @@
 package com.learnings.iot_platform.service;
 
-import com.learnings.iot_platform.dto.SensorDto;
+import com.learnings.iot_platform.dto.SensorRequestDto;
+import com.learnings.iot_platform.dto.SensorResponseDto;
 import com.learnings.iot_platform.model.Sensor;
 import com.learnings.iot_platform.repository.SensorRepository;
 import org.springframework.stereotype.Service;
@@ -14,19 +15,34 @@ public class SensorService {
         this.sensorRepository = sensorRepository;
     }
 
-    public Sensor createSensor(SensorDto sensorDto) {
-        Sensor convertedSensor = convertSensorDtoToSensorDto(sensorDto);
+    public Sensor createSensor(SensorRequestDto sensorRequestDto) {
+        Sensor convertedSensor = convertSensorRequestDtoToSensor(sensorRequestDto);
         Sensor savedSensor = sensorRepository.save(convertedSensor);
-        System.out.println(savedSensor);
         return savedSensor;
     }
 
-    private Sensor convertSensorDtoToSensorDto(SensorDto sensorDto) {
+    public SensorResponseDto getSensorById(String sensorId) {
+        Sensor sensor = sensorRepository.findById(sensorId).orElse(null);
+        return convertSensorToSensorResponse(sensor);
+    }
+
+    private Sensor convertSensorRequestDtoToSensor(SensorRequestDto sensorRequestDto) {
         Sensor sensor = new Sensor();
-        sensor.setName(sensorDto.getSensorName());
-        sensor.setTemperature(sensorDto.getTemperature());
-        sensor.setLatitude(sensorDto.getLatitude());
-        sensor.setLongitude(sensorDto.getLongitude());
+        sensor.setName(sensorRequestDto.getSensorName());
+        sensor.setTemperature(sensorRequestDto.getTemperature());
+        sensor.setLatitude(sensorRequestDto.getLatitude());
+        sensor.setLongitude(sensorRequestDto.getLongitude());
         return sensor;
     }
+
+    private SensorResponseDto convertSensorToSensorResponse(Sensor sensor) {
+        SensorResponseDto sensorResponseDto = new SensorResponseDto();
+        sensorResponseDto.setSensorId(sensor.getId());
+        sensorResponseDto.setSensorName(sensor.getName());
+        sensorResponseDto.setTemperature(sensor.getTemperature());
+        sensorResponseDto.setLatitude(sensor.getLatitude());
+        sensorResponseDto.setLongitude(sensor.getLongitude());
+        return sensorResponseDto;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.learnings.iot_platform.service;
 
 import com.learnings.iot_platform.dto.SensorRequestDto;
 import com.learnings.iot_platform.dto.SensorResponseDto;
+import com.learnings.iot_platform.dto.SensorUpdateRequestDto;
 import com.learnings.iot_platform.model.Sensor;
 import com.learnings.iot_platform.repository.SensorRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,5 +59,22 @@ public class SensorServiceTest {
         SensorResponseDto sensorResponseDto = sensorService.getSensorById(invalidSensorId);
 
         assertNull(sensorResponseDto);
+    }
+
+    @Test
+    void givenValidSensorDetails_whenUpdatingSensor_thenReturnSensorDto() {
+        String sensorId = "1";
+        String newSensorName = "sensor2";
+        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, newSensorName, 25.5, 17d, 78d);
+        Sensor sensor = new Sensor(sensorId, "sensor1", 25.5, 17d, 78d);
+        Sensor updatedSensor = new Sensor(sensorId, newSensorName, 25.5, 17d, 78d);
+        when(sensorRepository.findById(sensorId)).thenReturn(Optional.of(sensor));
+        when(sensorRepository.save(any(Sensor.class))).thenReturn(updatedSensor);
+
+        SensorResponseDto updatedSensorResponseDto =  sensorService.updateSensor(sensorUpdateRequestDto);
+
+        verify(sensorRepository, times(1)).findById(sensorId);
+        verify(sensorRepository, times(1)).save(updatedSensor);
+        assertEquals(updatedSensorResponseDto.getSensorName(), newSensorName);
     }
 }

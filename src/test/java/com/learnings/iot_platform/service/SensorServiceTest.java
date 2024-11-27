@@ -33,7 +33,7 @@ public class SensorServiceTest {
     @Test
     void givenSensorDetails_whenSensorIsCreated_thenCallsRepositorySave(){
         SensorRequestDto sensorRequestDto = new SensorRequestDto("Sensor1", 25.5, 17, 78);
-        when(sensorRepository.save(any(Sensor.class))).thenReturn(new Sensor());
+        when(sensorRepository.save(any(Sensor.class))).thenReturn(new Sensor("1", "Sensor1", 25.5, 17d, 78d));
 
         sensorService.createSensor(sensorRequestDto);
 
@@ -48,7 +48,7 @@ public class SensorServiceTest {
 
         SensorResponseDto sensorResponseDto = sensorService.getSensorById(sensorId);
 
-        assertEquals(sensorId, sensorResponseDto.getSensorId());
+        assertEquals(sensorId, sensorResponseDto.getId());
     }
 
 
@@ -66,7 +66,7 @@ public class SensorServiceTest {
 
         verify(sensorRepository, times(1)).findById(sensorId);
         verify(sensorRepository, times(1)).save(updatedSensor);
-        assertEquals(updatedSensorResponseDto.getSensorName(), newSensorName);
+        assertEquals(updatedSensorResponseDto.getName(), newSensorName);
     }
 
     @Test

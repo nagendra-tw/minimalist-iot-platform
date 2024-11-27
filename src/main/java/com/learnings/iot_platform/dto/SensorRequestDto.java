@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class SensorRequestDto {
-    private String sensorName;
+    private String name;
     private double temperature;
     private double latitude;
     private double longitude;

@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SensorResponseDto {
-    private String sensorId;
-    private String sensorName;
+    private String id;
+    private String name;
     private double temperature;
     private double latitude;
     private double longitude;

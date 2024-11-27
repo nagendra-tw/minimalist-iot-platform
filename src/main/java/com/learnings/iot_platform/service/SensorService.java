@@ -17,9 +17,10 @@ public class SensorService {
         this.sensorRepository = sensorRepository;
     }
 
-    public Sensor createSensor(SensorRequestDto sensorRequestDto) {
+    public SensorResponseDto createSensor(SensorRequestDto sensorRequestDto) {
         Sensor convertedSensor = convertSensorRequestDtoToSensor(sensorRequestDto);
-        return sensorRepository.save(convertedSensor);
+        Sensor savedSensor = sensorRepository.save(convertedSensor);
+        return convertSensorToSensorResponse(savedSensor);
     }
 
     public SensorResponseDto getSensorById(String sensorId) {
@@ -50,7 +51,7 @@ public class SensorService {
 
     private Sensor convertSensorRequestDtoToSensor(SensorRequestDto sensorRequestDto) {
         Sensor sensor = new Sensor();
-        sensor.setName(sensorRequestDto.getSensorName());
+        sensor.setName(sensorRequestDto.getName());
         sensor.setTemperature(sensorRequestDto.getTemperature());
         sensor.setLatitude(sensorRequestDto.getLatitude());
         sensor.setLongitude(sensorRequestDto.getLongitude());
@@ -59,8 +60,8 @@ public class SensorService {
 
     private SensorResponseDto convertSensorToSensorResponse(Sensor sensor) {
         SensorResponseDto sensorResponseDto = new SensorResponseDto();
-        sensorResponseDto.setSensorId(sensor.getId());
-        sensorResponseDto.setSensorName(sensor.getName());
+        sensorResponseDto.setId(sensor.getId());
+        sensorResponseDto.setName(sensor.getName());
         sensorResponseDto.setTemperature(sensor.getTemperature());
         sensorResponseDto.setLatitude(sensor.getLatitude());
         sensorResponseDto.setLongitude(sensor.getLongitude());

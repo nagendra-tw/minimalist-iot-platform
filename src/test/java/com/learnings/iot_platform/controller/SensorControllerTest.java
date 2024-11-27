@@ -14,11 +14,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @WebMvcTest(SensorController.class)
 public class SensorControllerTest {
@@ -75,6 +75,17 @@ public class SensorControllerTest {
                 .andExpect(jsonPath("$[2].id").value("3"))
                 .andExpect(jsonPath("$[2].name").value("sensor3"))
         ;
+    }
+
+    @Test
+    void givenSensorId_whenSensorIsDeleted_thenReturnSensorIsDeleted() throws Exception {
+        String sensorId = "1";
+
+        mockMvc.perform(delete("/sensors/{id}", sensorId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Sensor deleted with id: " + sensorId));
+
+        verify(sensorService, times(1)).deleteSensor(sensorId);
     }
 
 }

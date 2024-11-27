@@ -1,5 +1,6 @@
 package com.learnings.iot_platform.controller;
 
+import com.learnings.iot_platform.dto.SensorDeleteResponseDto;
 import com.learnings.iot_platform.dto.SensorRequestDto;
 import com.learnings.iot_platform.dto.SensorResponseDto;
 import com.learnings.iot_platform.service.SensorService;
@@ -26,6 +27,12 @@ public class SensorController {
     public ResponseEntity<SensorResponseDto> createSensor(@RequestBody SensorRequestDto sensorRequestDto) {
         SensorResponseDto savedSensor = sensorService.createSensor(sensorRequestDto);
         return new ResponseEntity<>(savedSensor, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<SensorDeleteResponseDto> deleteSensor(@PathVariable String id) {
+        sensorService.deleteSensor(id);
+        return new ResponseEntity<>(new SensorDeleteResponseDto("Sensor deleted with id: " + id), HttpStatus.OK);
     }
 
 }

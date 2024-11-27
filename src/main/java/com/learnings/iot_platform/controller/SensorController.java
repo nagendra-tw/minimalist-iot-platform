@@ -3,6 +3,7 @@ package com.learnings.iot_platform.controller;
 import com.learnings.iot_platform.dto.*;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.service.SensorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,8 @@ public class SensorController {
     }
 
     @PostMapping
-    public ResponseEntity<SensorResponseDto> createSensor(@RequestBody SensorCreateRequestDto sensorCreateRequestDto) {
+    public ResponseEntity<SensorResponseDto> createSensor(@Valid @RequestBody SensorCreateRequestDto sensorCreateRequestDto) {
+        System.out.println(sensorCreateRequestDto);
         SensorResponseDto savedSensor = sensorService.createSensor(sensorCreateRequestDto);
         return new ResponseEntity<>(savedSensor, HttpStatus.CREATED);
     }
@@ -50,7 +52,7 @@ public class SensorController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateSensor(@RequestBody SensorUpdateRequestDto sensorUpdateRequestDto) {
+    public ResponseEntity<?> updateSensor(@Valid @RequestBody SensorUpdateRequestDto sensorUpdateRequestDto) {
         try {
             SensorResponseDto sensorResponseDto = sensorService.updateSensor(sensorUpdateRequestDto);
             return new ResponseEntity<>(sensorResponseDto, HttpStatus.OK);

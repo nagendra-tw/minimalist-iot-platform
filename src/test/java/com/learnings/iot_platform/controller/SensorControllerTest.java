@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learnings.iot_platform.dto.SensorRequestDto;
 import com.learnings.iot_platform.dto.SensorResponseDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
+import com.learnings.iot_platform.model.Sensor;
 import com.learnings.iot_platform.service.SensorService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +85,7 @@ public class SensorControllerTest {
         String sensorId = "1";
 
         mockMvc.perform(delete("/sensors/{id}", sensorId))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Sensor deleted with id: " + sensorId));
 
         verify(sensorService, times(1)).deleteSensor(sensorId);
@@ -103,4 +104,20 @@ public class SensorControllerTest {
         verify(sensorService, times(1)).deleteSensor(sensorId);
     }
 
+    @Test
+    void givenSensorId_whenSensorIsRetrieved_thenReturnSensor() throws Exception {
+        String sensorId = "1";
+
+        when(sensorService.getSensorById(sensorId)).thenReturn(new SensorResponseDto("1", "sensor1", 23d,43d,56.6d));
+
+        mockMvc.perform(get("/sensors/{id}", sensorId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value("sensor1"))
+                .andExpect(jsonPath("$.temperature").value(23d))
+                .andExpect(jsonPath("$.latitude").value(43d))
+                .andExpect(jsonPath("$.longitude").value(56.6d))
+        ;
+
+    }
 }

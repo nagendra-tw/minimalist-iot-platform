@@ -8,6 +8,9 @@ import com.learnings.iot_platform.model.Sensor;
 import com.learnings.iot_platform.repository.SensorRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class SensorService {
 
@@ -21,6 +24,11 @@ public class SensorService {
         Sensor convertedSensor = convertSensorRequestDtoToSensor(sensorRequestDto);
         Sensor savedSensor = sensorRepository.save(convertedSensor);
         return convertSensorToSensorResponse(savedSensor);
+    }
+
+    public List<SensorResponseDto> getAllSensors() {
+        List<Sensor> sensors = sensorRepository.findAll();
+        return sensors.stream().map(this::convertSensorToSensorResponse).toList();
     }
 
     public SensorResponseDto getSensorById(String sensorId) {
@@ -67,6 +75,5 @@ public class SensorService {
         sensorResponseDto.setLongitude(sensor.getLongitude());
         return sensorResponseDto;
     }
-
 
 }

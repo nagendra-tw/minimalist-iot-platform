@@ -52,4 +52,5 @@ public class SensorControllerTest {
                 .andExpect(jsonPath("$.longitude").value(longitude))
         ;
     }
+
 }

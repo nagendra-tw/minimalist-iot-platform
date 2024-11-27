@@ -12,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,6 +40,20 @@ public class SensorServiceTest {
         sensorService.createSensor(sensorRequestDto);
 
         verify(sensorRepository, times(1)).save(any(Sensor.class));
+    }
+
+    @Test
+    void shouldReturnsAllSensors() {
+        List<Sensor> sensors = new ArrayList<>();
+        sensors.add(new Sensor("1", "Sensor1", 25.5, 17d, 78d));
+        sensors.add(new Sensor("2", "Sensor2", 25.5, 17d, 78d));
+        sensors.add(new Sensor("3", "Sensor3", 25.5, 17d, 78d));
+        when(sensorRepository.findAll()).thenReturn(sensors);
+
+        List<SensorResponseDto> sensorsResponse = sensorService.getAllSensors();
+
+        verify(sensorRepository, times(1)).findAll();
+        assertEquals(sensors.size(), sensorsResponse.size());
     }
 
     @Test

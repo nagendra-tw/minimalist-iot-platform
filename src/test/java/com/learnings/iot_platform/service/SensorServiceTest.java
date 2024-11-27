@@ -77,4 +77,15 @@ public class SensorServiceTest {
         verify(sensorRepository, times(1)).save(updatedSensor);
         assertEquals(updatedSensorResponseDto.getSensorName(), newSensorName);
     }
+
+    @Test
+    void givenValidSensorDetails_whenDeletingSensor_thenCallsRepositoryDelete(){
+        String sensorId = "1";
+        when(sensorRepository.existsById(sensorId)).thenReturn(true);
+
+        sensorService.deleteSensor(sensorId);
+
+        verify(sensorRepository, times(1)).deleteById(sensorId);
+    }
+
 }

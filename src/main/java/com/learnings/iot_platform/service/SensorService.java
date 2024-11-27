@@ -18,12 +18,12 @@ public class SensorService {
 
     public Sensor createSensor(SensorRequestDto sensorRequestDto) {
         Sensor convertedSensor = convertSensorRequestDtoToSensor(sensorRequestDto);
-        Sensor savedSensor = sensorRepository.save(convertedSensor);
-        return savedSensor;
+        return sensorRepository.save(convertedSensor);
     }
 
     public SensorResponseDto getSensorById(String sensorId) {
         Sensor sensor = sensorRepository.findById(sensorId).orElse(null);
+        System.out.println(sensor);
         if (sensor == null) {
             // todo: show detailed information in the response
             return null;
@@ -44,6 +44,13 @@ public class SensorService {
         savedSensor.setLongitude(sensorUpdateRequestDto.getLongitude());
         Sensor updatedSensor = sensorRepository.save(savedSensor);
         return convertSensorToSensorResponse(updatedSensor);
+    }
+
+    public void deleteSensor(String sensorId) {
+        if(sensorRepository.existsById(sensorId)) {
+            sensorRepository.deleteById(sensorId);
+        }
+        // todo: throw an error if sensor with given sensorId does not exist
     }
 
     private Sensor convertSensorRequestDtoToSensor(SensorRequestDto sensorRequestDto) {

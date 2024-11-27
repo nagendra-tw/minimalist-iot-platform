@@ -3,6 +3,7 @@ package com.learnings.iot_platform.service;
 import com.learnings.iot_platform.dto.SensorRequestDto;
 import com.learnings.iot_platform.dto.SensorResponseDto;
 import com.learnings.iot_platform.dto.SensorUpdateRequestDto;
+import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.model.Sensor;
 import com.learnings.iot_platform.repository.SensorRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -51,15 +51,6 @@ public class SensorServiceTest {
         assertEquals(sensorId, sensorResponseDto.getSensorId());
     }
 
-    @Test
-    void givenInvalidSensorId_whenGettingSensor_thenReturnNull() {
-        String invalidSensorId = "invalidSensorId";
-        when(sensorRepository.findById(invalidSensorId)).thenReturn(Optional.empty());
-
-        SensorResponseDto sensorResponseDto = sensorService.getSensorById(invalidSensorId);
-
-        assertNull(sensorResponseDto);
-    }
 
     @Test
     void givenValidSensorDetails_whenUpdatingSensor_thenReturnSensorDto() {
@@ -81,11 +72,38 @@ public class SensorServiceTest {
     @Test
     void givenValidSensorDetails_whenDeletingSensor_thenCallsRepositoryDelete(){
         String sensorId = "1";
-        when(sensorRepository.existsById(sensorId)).thenReturn(true);
+        Sensor sensor = new Sensor(sensorId, "sensor1", 25.5, 17d, 78d);
+        when(sensorRepository.findById(sensorId)).thenReturn(Optional.of(sensor));
 
         sensorService.deleteSensor(sensorId);
 
         verify(sensorRepository, times(1)).deleteById(sensorId);
+    }
+
+    @Test
+    void givenInvalidSensorDetails_whenGettingSensor_thenThrowSensorNotFoundException() {
+        String sensorId = "1";
+        when(sensorRepository.findById(sensorId)).thenReturn(Optional.empty());
+
+        assertThrows(SensorNotFoundException.class, () -> sensorService.getSensorById(sensorId));
+    }
+
+    @Test
+    void givenInvalidSensorDetails_whenUpdatingSensor_thenThrowSensorNotFoundException() {
+        String sensorId = "InvalidSensorId";
+        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, "sensor2", 25.5, 17d, 78d);
+        when(sensorRepository.findById(sensorId)).thenReturn(Optional.empty());
+
+        assertThrows(SensorNotFoundException.class, () -> sensorService.updateSensor(sensorUpdateRequestDto));
+    }
+
+    @Test
+    void givenInvalidSensorDetails_whenDeletingSensor_thenThrowSensorNotFoundException() {
+        String sensorId = "InvalidSensorId";
+
+        when(sensorRepository.findById(sensorId)).thenReturn(Optional.empty());
+
+        assertThrows(SensorNotFoundException.class, () -> sensorService.deleteSensor(sensorId));
     }
 
 }

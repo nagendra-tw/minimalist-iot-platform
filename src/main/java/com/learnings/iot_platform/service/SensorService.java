@@ -3,6 +3,7 @@ package com.learnings.iot_platform.service;
 import com.learnings.iot_platform.dto.SensorRequestDto;
 import com.learnings.iot_platform.dto.SensorResponseDto;
 import com.learnings.iot_platform.dto.SensorUpdateRequestDto;
+import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.model.Sensor;
 import com.learnings.iot_platform.repository.SensorRepository;
 import org.springframework.stereotype.Service;
@@ -22,22 +23,14 @@ public class SensorService {
     }
 
     public SensorResponseDto getSensorById(String sensorId) {
-        Sensor sensor = sensorRepository.findById(sensorId).orElse(null);
-        System.out.println(sensor);
-        if (sensor == null) {
-            // todo: show detailed information in the response
-            return null;
-        }
+        Sensor sensor = getSensor(sensorId);
+
         return convertSensorToSensorResponse(sensor);
     }
 
     public SensorResponseDto updateSensor(SensorUpdateRequestDto sensorUpdateRequestDto) {
-        Sensor savedSensor = sensorRepository.findById(sensorUpdateRequestDto.getSensorId()).orElse(null);
-        System.out.println("savedSensor: " + savedSensor);
-        if(savedSensor == null) {
-            // todo: raise an error
-            return null;
-        }
+        Sensor savedSensor = getSensor(sensorUpdateRequestDto.getSensorId());
+
         savedSensor.setName(sensorUpdateRequestDto.getSensorName());
         savedSensor.setTemperature(sensorUpdateRequestDto.getTemperature());
         savedSensor.setLatitude(sensorUpdateRequestDto.getLatitude());
@@ -47,10 +40,12 @@ public class SensorService {
     }
 
     public void deleteSensor(String sensorId) {
-        if(sensorRepository.existsById(sensorId)) {
-            sensorRepository.deleteById(sensorId);
-        }
-        // todo: throw an error if sensor with given sensorId does not exist
+        Sensor existingSensor = getSensor(sensorId);
+        sensorRepository.deleteById(existingSensor.getId());
+    }
+
+    private Sensor getSensor(String sensorId) {
+        return sensorRepository.findById(sensorId).orElseThrow(() -> new SensorNotFoundException(sensorId));
     }
 
     private Sensor convertSensorRequestDtoToSensor(SensorRequestDto sensorRequestDto) {

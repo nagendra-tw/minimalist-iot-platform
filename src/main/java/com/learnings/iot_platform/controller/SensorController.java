@@ -1,8 +1,6 @@
 package com.learnings.iot_platform.controller;
 
-import com.learnings.iot_platform.dto.SensorDeleteResponseDto;
-import com.learnings.iot_platform.dto.SensorRequestDto;
-import com.learnings.iot_platform.dto.SensorResponseDto;
+import com.learnings.iot_platform.dto.*;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.service.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +22,13 @@ public class SensorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SensorResponseDto> getSensorById(@PathVariable String id) {
-        return new ResponseEntity<>(sensorService.getSensorById(id), HttpStatus.OK);
+    public ResponseEntity<?> getSensorById(@PathVariable String id) {
+        try {
+            return new ResponseEntity<>(sensorService.getSensorById(id), HttpStatus.OK);
+        } catch(SensorNotFoundException e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(new ApiResponse("Sensor not found with id: " + id), HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping
@@ -43,6 +46,16 @@ public class SensorController {
             return new ResponseEntity<>(new SensorDeleteResponseDto("Sensor deleted with id: " + id), HttpStatus.OK);
         } catch(SensorNotFoundException e) {
             return new ResponseEntity<>(new SensorDeleteResponseDto("Sensor not found with id: " + id), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateSensor(@RequestBody SensorUpdateRequestDto sensorUpdateRequestDto) {
+        try {
+            SensorResponseDto sensorResponseDto = sensorService.updateSensor(sensorUpdateRequestDto);
+            return new ResponseEntity<>(sensorResponseDto, HttpStatus.OK);
+        } catch(SensorNotFoundException e) {
+            return new ResponseEntity<>(new ApiResponse("Sensor not found with id: " + sensorUpdateRequestDto.getSensorId()), HttpStatus.NOT_FOUND);
         }
     }
 

@@ -3,6 +3,7 @@ package com.learnings.iot_platform.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learnings.iot_platform.dto.SensorRequestDto;
 import com.learnings.iot_platform.dto.SensorResponseDto;
+import com.learnings.iot_platform.dto.SensorUpdateRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.model.Sensor;
 import com.learnings.iot_platform.service.SensorService;
@@ -118,6 +119,56 @@ public class SensorControllerTest {
                 .andExpect(jsonPath("$.latitude").value(43d))
                 .andExpect(jsonPath("$.longitude").value(56.6d))
         ;
+    }
 
+    @Test
+    void givenInvalidSensorId_whenSensorIsRetrieved_thenReturnSensorNotFound() throws Exception {
+        String sensorId = "InvalidSensorId";
+
+        doThrow(new SensorNotFoundException(sensorId)).when(sensorService).getSensorById(sensorId);
+
+        mockMvc.perform(get("/sensors/{id}", sensorId))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Sensor not found with id: " + sensorId));
+
+        verify(sensorService, times(1)).getSensorById(sensorId);
+    }
+
+    @Test
+    void givenUpdatedSensor_whenSensorIsUpdated_thenReturnUpdatedSensor() throws Exception {
+        String sensorId = "1";
+        String newSensorName = "Sensor-v2.0";
+        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, "sensor1", 30,40,60);
+        SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, newSensorName, 30, 40, 60);
+        when(sensorService.updateSensor(sensorUpdateRequestDto)).thenReturn(sensorResponseDto);
+
+        mockMvc.perform(put("/sensors")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(sensorUpdateRequestDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value(newSensorName))
+                .andExpect(jsonPath("$.temperature").value(30))
+                .andExpect(jsonPath("$.latitude").value(40))
+                .andExpect(jsonPath("$.longitude").value(60))
+        ;
+    }
+
+    @Test
+    void givenInvalidSensorId_whenSensorIsUpdated_thenReturnSensorNotFound() throws Exception {
+        String sensorId = "InvalidSensorId";
+        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, "sensor1", 30,40,60);
+
+
+        doThrow(new SensorNotFoundException(sensorId)).when(sensorService).updateSensor(sensorUpdateRequestDto);
+
+        mockMvc.perform(put("/sensors")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(sensorUpdateRequestDto)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Sensor not found with id: " + sensorId));
+        ;
+
+        verify(sensorService, times(1)).updateSensor(sensorUpdateRequestDto);
     }
 }

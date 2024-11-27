@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Document(collection = "sensors")
 @Data
 @AllArgsConstructor
@@ -17,5 +19,7 @@ public class Sensor {
     private Double temperature;
     private Double latitude;
     private Double longitude;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 }

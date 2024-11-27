@@ -32,8 +32,8 @@ public class SensorController {
     }
 
     @PostMapping
-    public ResponseEntity<SensorResponseDto> createSensor(@RequestBody SensorRequestDto sensorRequestDto) {
-        SensorResponseDto savedSensor = sensorService.createSensor(sensorRequestDto);
+    public ResponseEntity<SensorResponseDto> createSensor(@RequestBody SensorCreateRequestDto sensorCreateRequestDto) {
+        SensorResponseDto savedSensor = sensorService.createSensor(sensorCreateRequestDto);
         return new ResponseEntity<>(savedSensor, HttpStatus.CREATED);
     }
 

@@ -1,11 +1,10 @@
 package com.learnings.iot_platform.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learnings.iot_platform.dto.SensorRequestDto;
+import com.learnings.iot_platform.dto.SensorCreateRequestDto;
 import com.learnings.iot_platform.dto.SensorResponseDto;
 import com.learnings.iot_platform.dto.SensorUpdateRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
-import com.learnings.iot_platform.model.Sensor;
 import com.learnings.iot_platform.service.SensorService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -43,14 +42,14 @@ public class SensorControllerTest {
         double temperature = 50;
         double latitude = 17;
         double longitude = 18;
-        SensorRequestDto sensorRequestDto = new SensorRequestDto(sensorName, temperature, latitude, longitude);
-        SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, sensorName, temperature, latitude, longitude);
+        SensorCreateRequestDto sensorCreateRequestDto = new SensorCreateRequestDto(sensorName, temperature, latitude, longitude);
+        SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, sensorName, temperature, latitude, longitude, LocalDateTime.now(), LocalDateTime.now());
 
-        when(sensorService.createSensor(any(SensorRequestDto.class))).thenReturn(sensorResponseDto);
+        when(sensorService.createSensor(any(SensorCreateRequestDto.class))).thenReturn(sensorResponseDto);
 
         mockMvc.perform(post("/sensors")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(sensorRequestDto)))
+                .content(objectMapper.writeValueAsString(sensorCreateRequestDto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.name").value(sensorName))
@@ -63,9 +62,9 @@ public class SensorControllerTest {
     @Test
     void shouldReturnAllSensors() throws Exception {
         List<SensorResponseDto> sensorResponseDtoList = new ArrayList<>();
-        sensorResponseDtoList.add(new SensorResponseDto("1", "sensor1", 50, 17, 18));
-        sensorResponseDtoList.add(new SensorResponseDto("2", "sensor2", 50, 17, 18));
-        sensorResponseDtoList.add(new SensorResponseDto("3", "sensor3", 50, 17, 18));
+        sensorResponseDtoList.add(new SensorResponseDto("1", "sensor1", 50, 17, 18, LocalDateTime.now(), LocalDateTime.now()));
+        sensorResponseDtoList.add(new SensorResponseDto("2", "sensor2", 50, 17, 18, LocalDateTime.now(), LocalDateTime.now()));
+        sensorResponseDtoList.add(new SensorResponseDto("3", "sensor3", 50, 17, 18, LocalDateTime.now(), LocalDateTime.now()));
 
         when(sensorService.getAllSensors()).thenReturn(sensorResponseDtoList);
 
@@ -109,7 +108,7 @@ public class SensorControllerTest {
     void givenSensorId_whenSensorIsRetrieved_thenReturnSensor() throws Exception {
         String sensorId = "1";
 
-        when(sensorService.getSensorById(sensorId)).thenReturn(new SensorResponseDto("1", "sensor1", 23d,43d,56.6d));
+        when(sensorService.getSensorById(sensorId)).thenReturn(new SensorResponseDto("1", "sensor1", 23d,43d,56.6d, LocalDateTime.now(), LocalDateTime.now()));
 
         mockMvc.perform(get("/sensors/{id}", sensorId))
                 .andExpect(status().isOk())
@@ -138,8 +137,8 @@ public class SensorControllerTest {
     void givenUpdatedSensor_whenSensorIsUpdated_thenReturnUpdatedSensor() throws Exception {
         String sensorId = "1";
         String newSensorName = "Sensor-v2.0";
-        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, "sensor1", 30,40,60);
-        SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, newSensorName, 30, 40, 60);
+        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, "sensor1", 30,40,60, LocalDateTime.now(), LocalDateTime.now());
+        SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, newSensorName, 30, 40, 60, LocalDateTime.now(), LocalDateTime.now());
         when(sensorService.updateSensor(sensorUpdateRequestDto)).thenReturn(sensorResponseDto);
 
         mockMvc.perform(put("/sensors")
@@ -157,7 +156,7 @@ public class SensorControllerTest {
     @Test
     void givenInvalidSensorId_whenSensorIsUpdated_thenReturnSensorNotFound() throws Exception {
         String sensorId = "InvalidSensorId";
-        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, "sensor1", 30,40,60);
+        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, "sensor1", 30,40,60, LocalDateTime.now(), LocalDateTime.now());
 
 
         doThrow(new SensorNotFoundException(sensorId)).when(sensorService).updateSensor(sensorUpdateRequestDto);

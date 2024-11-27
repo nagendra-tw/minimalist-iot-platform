@@ -3,6 +3,7 @@ package com.learnings.iot_platform.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learnings.iot_platform.dto.SensorRequestDto;
 import com.learnings.iot_platform.dto.SensorResponseDto;
+import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.service.SensorService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -82,8 +84,21 @@ public class SensorControllerTest {
         String sensorId = "1";
 
         mockMvc.perform(delete("/sensors/{id}", sensorId))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect(jsonPath("$.message").value("Sensor deleted with id: " + sensorId));
+
+        verify(sensorService, times(1)).deleteSensor(sensorId);
+    }
+
+    @Test
+    void givenInvalidSensorId_whenSensorIsDeleted_thenReturnSensorNotFound() throws Exception {
+        String sensorId = "InvalidSensorId";
+
+        doThrow(new SensorNotFoundException(sensorId)).when(sensorService).deleteSensor(sensorId);
+
+        mockMvc.perform(delete("/sensors/{id}", sensorId))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Sensor not found with id: " + sensorId));
 
         verify(sensorService, times(1)).deleteSensor(sensorId);
     }

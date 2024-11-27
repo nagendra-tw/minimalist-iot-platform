@@ -3,6 +3,7 @@ package com.learnings.iot_platform.controller;
 import com.learnings.iot_platform.dto.SensorDeleteResponseDto;
 import com.learnings.iot_platform.dto.SensorRequestDto;
 import com.learnings.iot_platform.dto.SensorResponseDto;
+import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.service.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,8 +32,12 @@ public class SensorController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<SensorDeleteResponseDto> deleteSensor(@PathVariable String id) {
-        sensorService.deleteSensor(id);
-        return new ResponseEntity<>(new SensorDeleteResponseDto("Sensor deleted with id: " + id), HttpStatus.OK);
+        try {
+            sensorService.deleteSensor(id);
+            return new ResponseEntity<>(new SensorDeleteResponseDto("Sensor deleted with id: " + id), HttpStatus.NO_CONTENT);
+        } catch(SensorNotFoundException e) {
+            return new ResponseEntity<>(new SensorDeleteResponseDto("Sensor not found with id: " + id), HttpStatus.NOT_FOUND);
+        }
     }
 
 }

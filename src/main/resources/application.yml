@@ -7,3 +7,6 @@ spring:
       host: localhost
       port: 27017
       database: iot-platform
+jwt:
+  secret: ${JWT_SECRET}
+

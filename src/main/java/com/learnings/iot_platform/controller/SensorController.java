@@ -1,6 +1,10 @@
 package com.learnings.iot_platform.controller;
 
 import com.learnings.iot_platform.dto.*;
+import com.learnings.iot_platform.dto.sensor.SensorCreateRequestDto;
+import com.learnings.iot_platform.dto.sensor.SensorDeleteResponseDto;
+import com.learnings.iot_platform.dto.sensor.SensorResponseDto;
+import com.learnings.iot_platform.dto.sensor.SensorUpdateRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.service.SensorService;
 import jakarta.validation.Valid;
@@ -27,14 +31,14 @@ public class SensorController {
         try {
             return new ResponseEntity<>(sensorService.getSensorById(id), HttpStatus.OK);
         } catch(SensorNotFoundException e) {
-            System.out.println(e.getMessage());
+
             return new ResponseEntity<>(new ApiResponse("Sensor not found with id: " + id), HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
     public ResponseEntity<SensorResponseDto> createSensor(@Valid @RequestBody SensorCreateRequestDto sensorCreateRequestDto) {
-        System.out.println(sensorCreateRequestDto);
+
         SensorResponseDto savedSensor = sensorService.createSensor(sensorCreateRequestDto);
         return new ResponseEntity<>(savedSensor, HttpStatus.CREATED);
     }
@@ -44,7 +48,7 @@ public class SensorController {
         try {
             sensorService.deleteSensor(id);
             SensorDeleteResponseDto deleteResponseDto = new SensorDeleteResponseDto("Sensor deleted with id: " + id);
-            System.out.println(deleteResponseDto);
+
             return new ResponseEntity<>(new SensorDeleteResponseDto("Sensor deleted with id: " + id), HttpStatus.OK);
         } catch(SensorNotFoundException e) {
             return new ResponseEntity<>(new SensorDeleteResponseDto("Sensor not found with id: " + id), HttpStatus.NOT_FOUND);

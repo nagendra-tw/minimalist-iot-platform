@@ -1,9 +1,9 @@
 package com.learnings.iot_platform.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learnings.iot_platform.dto.SensorCreateRequestDto;
-import com.learnings.iot_platform.dto.SensorResponseDto;
-import com.learnings.iot_platform.dto.SensorUpdateRequestDto;
+import com.learnings.iot_platform.dto.sensor.SensorCreateRequestDto;
+import com.learnings.iot_platform.dto.sensor.SensorResponseDto;
+import com.learnings.iot_platform.dto.sensor.SensorUpdateRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.service.SensorService;
 import org.junit.jupiter.api.Test;

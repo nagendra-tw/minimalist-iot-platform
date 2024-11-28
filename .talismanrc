@@ -5,3 +5,18 @@ fileignoreconfig:
 - filename: mvnw
   checksum: 9bd82c104d9f02af78ace97ca594f24fe5595444aac20ee8aa875d4353de7090
 version: ""
+
+fileignoreconfig:
+- filename: src/main/java/com/learnings/iot_platform/config/DotenvConfig.java
+  checksum: f5d466b7e2e45a8927ca56bd1a3e4559dc774e36fda8e95922dc91eb1c11a7da
+- filename: src/main/java/com/learnings/iot_platform/auth/JwtUtil.java
+  checksum: e8b7fac73068f13ab1376c1b9eddb47a76ed7ced889bec919460303e389274bd
+- filename: src/main/java/com/learnings/iot_platform/auth/JwtAuthenticationFilter.java
+  checksum: 33b7a8c084d23046472e6ac69f245726496fa1caa499030c29128db3ec5cf9ec
+- filename: src/main/resources/application.yml
+  checksum: 56961b845ba6ef53396adb6a2d90f697d43107683f6c520f15fd3bd87d4958f8
+- filename: src/main/java/com/learnings/iot_platform/service/UserService.java
+  checksum: 8860358dff8a8dbbb31de4e13096929de447ad57d6485732dd04489db3653042
+- filename: src/test/java/com/learnings/iot_platform/service/UserServiceTest.java
+  checksum: e60ea824d7feec601e315f666ee456804fe5e401d35975ac2b3a87dafa458d80
+version: ""

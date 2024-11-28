@@ -1,4 +1,4 @@
-package com.learnings.iot_platform.dto;
+package com.learnings.iot_platform.dto.sensor;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

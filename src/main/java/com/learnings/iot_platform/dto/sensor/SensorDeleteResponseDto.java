@@ -1,4 +1,4 @@
-package com.learnings.iot_platform.dto;
+package com.learnings.iot_platform.dto.sensor;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

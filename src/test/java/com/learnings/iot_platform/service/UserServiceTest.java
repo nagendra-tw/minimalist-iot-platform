@@ -1,15 +1,17 @@
 package com.learnings.iot_platform.service;
 
+import com.learnings.iot_platform.auth.JwtUtil;
 import com.learnings.iot_platform.dto.user.CreateUserDto;
+import com.learnings.iot_platform.dto.user.LoginUserDto;
 import com.learnings.iot_platform.exception.UsernameAlreadyExistsException;
 import com.learnings.iot_platform.model.User;
 import com.learnings.iot_platform.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -30,9 +32,15 @@ public class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private AuthenticationManager authenticationManager;
+
+    @Mock
+    private JwtUtil jwtUtil;
+
     @BeforeEach
     void setup() {
-        userService = new UserService(userRepository, passwordEncoder);
+        userService = new UserService(userRepository, passwordEncoder, jwtUtil, authenticationManager);
     }
     // todo: rename the dto classes
     @Test
@@ -64,7 +72,5 @@ public class UserServiceTest {
 
         when(userRepository.findByUsername(createUserDto.getUsername())).thenReturn(Optional.of(user));
         assertThrows(UsernameAlreadyExistsException.class, () -> userService.createUser(createUserDto));
-
     }
-
 }

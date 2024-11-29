@@ -54,8 +54,7 @@ public class UserService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return jwtUtil.generateToken(authentication);
         } catch (BadCredentialsException e) {
-            System.out.println(e.getMessage());
-            throw new BadCredentialsException("Invalid username or password");
+            throw new BadCredentialsException("Bad Credentials: Invalid username or password");
         }
     }
 

@@ -11,9 +11,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -64,6 +66,21 @@ public class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("username"))
                 .andExpect(jsonPath("$.token").exists())
+                ;
+    }
+
+    @Test
+    void givenInvalidCredentials_whenLoggingIn_thenBadCredentialsResponseIsReturned() throws Exception {
+        LoginUserDto loginUserDto = new LoginUserDto();
+        loginUserDto.setUsername("username");
+        loginUserDto.setPassword("password");
+        doThrow(new BadCredentialsException("Bad Credentials: Invalid username or password")).when(userService).login(loginUserDto);
+
+        mockMvc.perform(post("/auth/login")
+            .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginUserDto)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Bad Credentials: Invalid username or password"))
                 ;
     }
 }

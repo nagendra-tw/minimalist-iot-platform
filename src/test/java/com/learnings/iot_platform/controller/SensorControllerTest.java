@@ -1,7 +1,6 @@
 package com.learnings.iot_platform.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learnings.iot_platform.auth.JwtUtil;
 import com.learnings.iot_platform.dto.sensor.SensorCreateRequestDto;
 import com.learnings.iot_platform.dto.sensor.SensorResponseDto;
 import com.learnings.iot_platform.dto.sensor.SensorUpdateRequestDto;
@@ -11,27 +10,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //@WebMvcTest(SensorController.class)
 @SpringBootTest
@@ -70,6 +66,7 @@ public class SensorControllerTest {
 
         when(sensorService.createSensor(any(SensorCreateRequestDto.class))).thenReturn(sensorResponseDto);
 
+        performAdminAuthentication();
         mockMvc.perform(post("/sensors")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(sensorCreateRequestDto)))
@@ -107,6 +104,7 @@ public class SensorControllerTest {
     void givenSensorId_whenSensorIsDeleted_thenReturnSensorIsDeleted() throws Exception {
         String sensorId = "1";
 
+        performAdminAuthentication();
         mockMvc.perform(delete("/sensors/{id}", sensorId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Sensor deleted with id: " + sensorId));
@@ -120,6 +118,7 @@ public class SensorControllerTest {
 
         doThrow(new SensorNotFoundException(sensorId)).when(sensorService).deleteSensor(sensorId);
 
+        performAdminAuthentication();
         mockMvc.perform(delete("/sensors/{id}", sensorId))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Sensor not found with id: " + sensorId));
@@ -164,6 +163,7 @@ public class SensorControllerTest {
         SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, newSensorName, 30, 40, 60, LocalDateTime.now(), LocalDateTime.now());
         when(sensorService.updateSensor(sensorUpdateRequestDto)).thenReturn(sensorResponseDto);
 
+        performAdminAuthentication();
         mockMvc.perform(put("/sensors")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(sensorUpdateRequestDto)))
@@ -184,6 +184,7 @@ public class SensorControllerTest {
 
         doThrow(new SensorNotFoundException(sensorId)).when(sensorService).updateSensor(sensorUpdateRequestDto);
 
+        performAdminAuthentication();
         mockMvc.perform(put("/sensors")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(sensorUpdateRequestDto)))
@@ -192,5 +193,15 @@ public class SensorControllerTest {
         ;
 
         verify(sensorService, times(1)).updateSensor(sensorUpdateRequestDto);
+    }
+
+    private void performAdminAuthentication(){
+        UserDetails userDetails = User.withUsername("testuser")
+                .password("password")
+                .roles("ADMIN")
+                .build();
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

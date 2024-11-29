@@ -5,6 +5,7 @@ import com.learnings.iot_platform.auth.JwtAuthEntryPoint;
 import com.learnings.iot_platform.auth.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -36,8 +37,12 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthEntryPoint)
                 .and()
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/auth/**").permitAll()
-                    .anyRequest().authenticated();
+                    auth
+                            .requestMatchers("/auth/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/sensors").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.PUT, "/sensors").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.DELETE, "/sensors/{id}").hasRole("ADMIN")
+                            .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

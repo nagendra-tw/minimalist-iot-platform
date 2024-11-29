@@ -1,16 +1,26 @@
 package com.learnings.iot_platform.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.learnings.iot_platform.auth.JwtUtil;
 import com.learnings.iot_platform.dto.sensor.SensorCreateRequestDto;
 import com.learnings.iot_platform.dto.sensor.SensorResponseDto;
 import com.learnings.iot_platform.dto.sensor.SensorUpdateRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.service.SensorService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -23,7 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import static org.mockito.ArgumentMatchers.any;
 
-@WebMvcTest(SensorController.class)
+//@WebMvcTest(SensorController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class SensorControllerTest {
 
     @Autowired
@@ -34,6 +46,17 @@ public class SensorControllerTest {
 
     @MockBean
     private SensorService sensorService;
+
+    @BeforeEach
+    public void setUp() {
+        UserDetails userDetails = User.withUsername("testuser")
+                .password("password")
+                .roles("USER")
+                .build();
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
 
     @Test
     void givenSensorDetails_whenSensorIsCreated_thenReturnSensorIsSaved() throws Exception {

@@ -32,3 +32,8 @@ fileignoreconfig:
 - filename: src/main/java/com/learnings/iot_platform/service/UserService.java
   checksum: bf5a74e64a0b0076c1893cdc1016cd537adbdf7a82d398fd4f7e277e12df9a03
 version: ""
+
+fileignoreconfig:
+- filename: src/test/java/com/learnings/iot_platform/controller/SensorControllerTest.java
+  checksum: 4b2ee5a53f991b306a22c5a0793a671961da28d6b9b84a3be17cca7f991dcd7b
+version: ""

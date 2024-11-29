@@ -3,6 +3,7 @@ package com.learnings.iot_platform.service;
 import com.learnings.iot_platform.auth.JwtUtil;
 import com.learnings.iot_platform.dto.auth.AuthResponseDto;
 import com.learnings.iot_platform.dto.user.CreateUserDto;
+import com.learnings.iot_platform.dto.user.LoginUserDto;
 import com.learnings.iot_platform.exception.UsernameAlreadyExistsException;
 import com.learnings.iot_platform.model.User;
 import com.learnings.iot_platform.repository.UserRepository;
@@ -42,14 +43,18 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public String login(String username, String password){
+    public String login(LoginUserDto loginUserDto){
+        String username = loginUserDto.getUsername();
+        String password = loginUserDto.getPassword();
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return jwtUtil.generateToken(authentication);
         } catch (BadCredentialsException e) {
+            System.out.println(e.getMessage());
             throw new BadCredentialsException("Invalid username or password");
         }
     }

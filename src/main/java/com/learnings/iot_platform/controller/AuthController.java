@@ -1,7 +1,9 @@
 package com.learnings.iot_platform.controller;
 
 import com.learnings.iot_platform.dto.ApiResponse;
+import com.learnings.iot_platform.dto.auth.AuthResponseDto;
 import com.learnings.iot_platform.dto.user.CreateUserDto;
+import com.learnings.iot_platform.dto.user.LoginUserDto;
 import com.learnings.iot_platform.model.User;
 import com.learnings.iot_platform.service.UserService;
 import jakarta.validation.Valid;
@@ -28,5 +30,13 @@ public class AuthController {
         User registeredUser = userService.createUser(createUserDto);
         ApiResponse apiResponse = new ApiResponse(registeredUser.getUsername() + " registered successfully");
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDto> loginUser(@Valid @RequestBody LoginUserDto loginUserDto) {
+        System.out.println(loginUserDto);
+        String token = userService.login(loginUserDto);
+        AuthResponseDto authResponseDto = new AuthResponseDto(token, loginUserDto.getUsername());
+        return new ResponseEntity<>(authResponseDto, HttpStatus.OK);
     }
 }

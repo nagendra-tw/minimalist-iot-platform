@@ -33,8 +33,7 @@
 		<repository>
 			<id>central</id>
 			<url>https://repo.maven.apache.org/maven2</url>
-		</repository>
-	</repositories>
+		</repository>	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -110,6 +109,31 @@
 			<artifactId>dotenv-java</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>io.mongock</groupId>
+			<artifactId>mongock-bom</artifactId>
+			<version>5.5.0</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.mongock/mongock-springboot -->
+		<dependency>
+			<groupId>io.mongock</groupId>
+			<artifactId>mongock-springboot</artifactId>
+			<version>5.5.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.mongock/mongodb-springdata-v4-driver -->
+		<dependency>
+			<groupId>io.mongock</groupId>
+			<artifactId>mongodb-springdata-v4-driver</artifactId>
+			<version>5.5.0</version>
+		</dependency>
+
+
 
 	</dependencies>
 

@@ -10,8 +10,6 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
 
-logging:
-  level:
-    org:
-      springframework:
-        security=DEBUG:
+mongock:
+  migration-scan-package:
+    - com.learnings.iot_platform.migrations

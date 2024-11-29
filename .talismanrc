@@ -43,3 +43,9 @@ fileignoreconfig:
 - filename: src/test/java/com/learnings/iot_platform/controller/SensorControllerTest.java
   checksum: 7ba4dabcf9378db22d015e84fa046cfb7c0aaa848d4b6c17730510799f97236d
 version: ""
+
+
+fileignoreconfig:
+- filename: src/main/java/com/learnings/iot_platform/migrations/InsertAdminToDatabaseChangelog.java
+  checksum: a7a6fc76fd5f063de391406a8658223020eadf5afe0c7da8e33befe4896bd2bc
+version: ""

@@ -49,3 +49,8 @@ fileignoreconfig:
 - filename: src/main/java/com/learnings/iot_platform/migrations/InsertAdminToDatabaseChangelog.java
   checksum: a7a6fc76fd5f063de391406a8658223020eadf5afe0c7da8e33befe4896bd2bc
 version: ""
+
+fileignoreconfig:
+- filename: src/main/java/com/learnings/iot_platform/migrations/InsertUsersToDatabaseChangelog.java
+  checksum: 1ca4ba262554f384751a170f4a3b6b87f68faa1b85a4773a0b3ed747c07a6c1b
+version: ""

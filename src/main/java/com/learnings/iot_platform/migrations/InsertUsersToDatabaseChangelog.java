@@ -13,29 +13,26 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@ChangeUnit(id = "DB-admin-init", order = "1", author = "Nagendra")
-public class InsertAdminToDatabaseChangelog {
-
+@ChangeUnit(id = "DB-user-init", order = "2", author = "Nagendra")
+public class InsertUsersToDatabaseChangelog {
     private final MongoTemplate mongoTemplate;
     private final PasswordEncoder passwordEncoder;
-
-    public InsertAdminToDatabaseChangelog(MongoTemplate mongoTemplate, PasswordEncoder passwordEncoder) {
+    public InsertUsersToDatabaseChangelog(MongoTemplate mongoTemplate, PasswordEncoder passwordEncoder) {
         this.mongoTemplate = mongoTemplate;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Execution
     public void execute() {
-        if (mongoTemplate.findOne(
-                Query.query(Criteria.where("username").is("admin1")),
-                User.class
+        if(mongoTemplate.findOne(
+                Query.query(Criteria.where("username").is("user1")), User.class
         ) == null) {
             User user = new User();
-            user.setUsername("admin1");
-            user.setPasswordHash(passwordEncoder.encode("12121212"));
-            user.setEmail("admin1@gmail.com");
+            user.setUsername("user1");
+            user.setPasswordHash(passwordEncoder.encode("password"));
+            user.setEmail("user1@gmail.com");
             Set<String> roles = new HashSet<>();
-            roles.add("ROLE_ADMIN");
+            roles.add("ROLE_USER");
             user.setRoles(roles);
             user.setCreatedAt(LocalDateTime.now());
 
@@ -44,10 +41,9 @@ public class InsertAdminToDatabaseChangelog {
     }
 
     @RollbackExecution
-    public void rollback() {
+    public void rollback(){
         mongoTemplate.remove(
-                Query.query(Criteria.where("username").is("admin1")),
-                User.class
+                Query.query(Criteria.where("username").is("user1")), User.class
         );
     }
 }

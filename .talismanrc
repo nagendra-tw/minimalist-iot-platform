@@ -59,3 +59,8 @@ fileignoreconfig:
 - filename: src/test/java/com/learnings/iot_platform/auth/JwtUtilTest.java
   checksum: baa07fcefa65f623cf46de74831c287702bc9eb35748cdb05ec5307e406b47c4
 version: ""
+
+fileignoreconfig:
+- filename: src/test/java/com/learnings/iot_platform/service/UserServiceTest.java
+  checksum: 314232a0ccc8d8cedee5d753c0809a641db653d1634a05954eca9f388d96f8e8
+version: ""

@@ -12,6 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -19,6 +22,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -72,5 +76,43 @@ public class UserServiceTest {
 
         when(userRepository.findByUsername(createUserDto.getUsername())).thenReturn(Optional.of(user));
         assertThrows(UsernameAlreadyExistsException.class, () -> userService.createUser(createUserDto));
+    }
+
+    @Test
+    void givenLoginDetails_whenLoginUser_thenTokenIsReturned() {
+        LoginUserDto loginUserDto = new LoginUserDto();
+        loginUserDto.setUsername("username");
+        loginUserDto.setPassword("password");
+
+        Authentication mockAuthentication = mock(Authentication.class);
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .thenReturn(mockAuthentication);
+
+        // Mocking the JWT generation
+        String token = "valid-jwt-token";
+        when(jwtUtil.generateToken(mockAuthentication)).thenReturn(token);
+
+        // Call the method to test
+        String result = userService.login(loginUserDto);
+
+        // Verify that the authenticationManager.authenticate() was called once
+        verify(authenticationManager, times(1)).authenticate(any(UsernamePasswordAuthenticationToken.class));
+
+        // Verify that the JWT token is generated
+        verify(jwtUtil, times(1)).generateToken(mockAuthentication);
+
+        // Verify the result
+        assertEquals(token, result);
+    }
+
+    @Test
+    void givenIncorrectLoginDetails_whenLoginUser_thenThrowBadCredentialsException() {
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .thenThrow(new BadCredentialsException("Bad Credentials: Invalid username or password"));
+
+        BadCredentialsException exception = assertThrows(BadCredentialsException.class,
+                () -> userService.login(new LoginUserDto()));
+
+        assertEquals("Bad Credentials: Invalid username or password", exception.getMessage());
     }
 }

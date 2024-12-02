@@ -78,3 +78,7 @@ fileignoreconfig:
   checksum: 34ff7ae9027128f50d818f6342661d286a1fc1403ae8107a02cbd5e337d7d2a9
 version: ""
 
+fileignoreconfig:
+- filename: src/main/resources/application-integration-test.yml
+  checksum: 10b874218249509c26406b632b15217568f417b95199f59d0248d7ab34b58f45
+version: ""

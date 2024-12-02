@@ -1,0 +1,15 @@
+#spring.application.name=iot-platform
+spring:
+  application:
+    name: iot-platform
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/integration-test-db
+  
+jwt:
+  secret: ${JWT_SECRET}
+
+mongock:
+  migration-scan-package:
+    - com.learnings.iot_platform.migrations
+

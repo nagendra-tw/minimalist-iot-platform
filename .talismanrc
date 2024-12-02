@@ -54,3 +54,8 @@ fileignoreconfig:
 - filename: src/main/java/com/learnings/iot_platform/migrations/InsertUsersToDatabaseChangelog.java
   checksum: 1ca4ba262554f384751a170f4a3b6b87f68faa1b85a4773a0b3ed747c07a6c1b
 version: ""
+
+fileignoreconfig:
+- filename: src/test/java/com/learnings/iot_platform/auth/JwtUtilTest.java
+  checksum: baa07fcefa65f623cf46de74831c287702bc9eb35748cdb05ec5307e406b47c4
+version: ""

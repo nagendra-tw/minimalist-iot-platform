@@ -1,9 +1,9 @@
 package com.learnings.iot_platform.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.learnings.iot_platform.dto.sensor.SensorCreateRequestDto;
+import com.learnings.iot_platform.dto.sensor.CreateSensorRequestDto;
 import com.learnings.iot_platform.dto.sensor.SensorResponseDto;
-import com.learnings.iot_platform.dto.sensor.SensorUpdateRequestDto;
+import com.learnings.iot_platform.dto.sensor.UpdateSensorRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.service.SensorService;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,15 +61,15 @@ public class SensorControllerTest {
         double temperature = 50;
         double latitude = 17;
         double longitude = 18;
-        SensorCreateRequestDto sensorCreateRequestDto = new SensorCreateRequestDto(sensorName, temperature, latitude, longitude);
+        CreateSensorRequestDto createSensorRequestDto = new CreateSensorRequestDto(sensorName, temperature, latitude, longitude);
         SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, sensorName, temperature, latitude, longitude, LocalDateTime.now(), LocalDateTime.now());
 
-        when(sensorService.createSensor(any(SensorCreateRequestDto.class))).thenReturn(sensorResponseDto);
+        when(sensorService.createSensor(any(CreateSensorRequestDto.class))).thenReturn(sensorResponseDto);
 
         performAdminAuthentication();
         mockMvc.perform(post("/sensors")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(sensorCreateRequestDto)))
+                .content(objectMapper.writeValueAsString(createSensorRequestDto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.name").value(sensorName))
@@ -159,14 +159,14 @@ public class SensorControllerTest {
     void givenUpdatedSensor_whenSensorIsUpdated_thenReturnUpdatedSensor() throws Exception {
         String sensorId = "1";
         String newSensorName = "Sensor-v2.0";
-        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, "sensor1", 30,40,60, LocalDateTime.now(), LocalDateTime.now());
+        UpdateSensorRequestDto updateSensorRequestDto = new UpdateSensorRequestDto(sensorId, "sensor1", 30,40,60, LocalDateTime.now(), LocalDateTime.now());
         SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, newSensorName, 30, 40, 60, LocalDateTime.now(), LocalDateTime.now());
-        when(sensorService.updateSensor(sensorUpdateRequestDto)).thenReturn(sensorResponseDto);
+        when(sensorService.updateSensor(updateSensorRequestDto)).thenReturn(sensorResponseDto);
 
         performAdminAuthentication();
         mockMvc.perform(put("/sensors")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(sensorUpdateRequestDto)))
+                .content(objectMapper.writeValueAsString(updateSensorRequestDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.name").value(newSensorName))
@@ -179,20 +179,20 @@ public class SensorControllerTest {
     @Test
     void givenInvalidSensorId_whenSensorIsUpdated_thenReturnSensorNotFound() throws Exception {
         String sensorId = "InvalidSensorId";
-        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, "sensor1", 30,40,60, LocalDateTime.now(), LocalDateTime.now());
+        UpdateSensorRequestDto updateSensorRequestDto = new UpdateSensorRequestDto(sensorId, "sensor1", 30,40,60, LocalDateTime.now(), LocalDateTime.now());
 
 
-        doThrow(new SensorNotFoundException(sensorId)).when(sensorService).updateSensor(sensorUpdateRequestDto);
+        doThrow(new SensorNotFoundException(sensorId)).when(sensorService).updateSensor(updateSensorRequestDto);
 
         performAdminAuthentication();
         mockMvc.perform(put("/sensors")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(sensorUpdateRequestDto)))
+                        .content(objectMapper.writeValueAsString(updateSensorRequestDto)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Sensor not found with id: " + sensorId));
         ;
 
-        verify(sensorService, times(1)).updateSensor(sensorUpdateRequestDto);
+        verify(sensorService, times(1)).updateSensor(updateSensorRequestDto);
     }
 
     private void performAdminAuthentication(){

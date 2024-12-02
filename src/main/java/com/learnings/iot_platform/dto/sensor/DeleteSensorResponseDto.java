@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SensorDeleteResponseDto {
+public class DeleteSensorResponseDto {
     private String message;
 }

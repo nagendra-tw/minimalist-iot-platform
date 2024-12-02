@@ -1,8 +1,8 @@
 package com.learnings.iot_platform.service;
 
-import com.learnings.iot_platform.dto.sensor.SensorCreateRequestDto;
+import com.learnings.iot_platform.dto.sensor.CreateSensorRequestDto;
 import com.learnings.iot_platform.dto.sensor.SensorResponseDto;
-import com.learnings.iot_platform.dto.sensor.SensorUpdateRequestDto;
+import com.learnings.iot_platform.dto.sensor.UpdateSensorRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.model.Sensor;
 import com.learnings.iot_platform.repository.SensorRepository;
@@ -20,8 +20,8 @@ public class SensorService {
         this.sensorRepository = sensorRepository;
     }
 
-    public SensorResponseDto createSensor(SensorCreateRequestDto sensorCreateRequestDto) {
-        Sensor convertedSensor = convertSensorRequestDtoToSensor(sensorCreateRequestDto);
+    public SensorResponseDto createSensor(CreateSensorRequestDto createSensorRequestDto) {
+        Sensor convertedSensor = convertSensorRequestDtoToSensor(createSensorRequestDto);
         convertedSensor.setCreatedAt(LocalDateTime.now());
         convertedSensor.setUpdatedAt(LocalDateTime.now());
         Sensor savedSensor = sensorRepository.save(convertedSensor);
@@ -39,13 +39,13 @@ public class SensorService {
         return convertSensorToSensorResponse(sensor);
     }
 
-    public SensorResponseDto updateSensor(SensorUpdateRequestDto sensorUpdateRequestDto) {
-        Sensor savedSensor = getSensor(sensorUpdateRequestDto.getSensorId());
+    public SensorResponseDto updateSensor(UpdateSensorRequestDto updateSensorRequestDto) {
+        Sensor savedSensor = getSensor(updateSensorRequestDto.getSensorId());
 
-        savedSensor.setName(sensorUpdateRequestDto.getSensorName());
-        savedSensor.setTemperature(sensorUpdateRequestDto.getTemperature());
-        savedSensor.setLatitude(sensorUpdateRequestDto.getLatitude());
-        savedSensor.setLongitude(sensorUpdateRequestDto.getLongitude());
+        savedSensor.setName(updateSensorRequestDto.getSensorName());
+        savedSensor.setTemperature(updateSensorRequestDto.getTemperature());
+        savedSensor.setLatitude(updateSensorRequestDto.getLatitude());
+        savedSensor.setLongitude(updateSensorRequestDto.getLongitude());
         savedSensor.setUpdatedAt(LocalDateTime.now());
         Sensor updatedSensor = sensorRepository.save(savedSensor);
         return convertSensorToSensorResponse(updatedSensor);
@@ -60,12 +60,12 @@ public class SensorService {
         return sensorRepository.findById(sensorId).orElseThrow(() -> new SensorNotFoundException(sensorId));
     }
 
-    private Sensor convertSensorRequestDtoToSensor(SensorCreateRequestDto sensorCreateRequestDto) {
+    private Sensor convertSensorRequestDtoToSensor(CreateSensorRequestDto createSensorRequestDto) {
         Sensor sensor = new Sensor();
-        sensor.setName(sensorCreateRequestDto.getName());
-        sensor.setTemperature(sensorCreateRequestDto.getTemperature());
-        sensor.setLatitude(sensorCreateRequestDto.getLatitude());
-        sensor.setLongitude(sensorCreateRequestDto.getLongitude());
+        sensor.setName(createSensorRequestDto.getName());
+        sensor.setTemperature(createSensorRequestDto.getTemperature());
+        sensor.setLatitude(createSensorRequestDto.getLatitude());
+        sensor.setLongitude(createSensorRequestDto.getLongitude());
         return sensor;
     }
 

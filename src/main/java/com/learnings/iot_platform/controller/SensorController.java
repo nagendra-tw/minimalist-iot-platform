@@ -1,17 +1,16 @@
 package com.learnings.iot_platform.controller;
 
 import com.learnings.iot_platform.dto.*;
-import com.learnings.iot_platform.dto.sensor.SensorCreateRequestDto;
-import com.learnings.iot_platform.dto.sensor.SensorDeleteResponseDto;
+import com.learnings.iot_platform.dto.sensor.CreateSensorRequestDto;
+import com.learnings.iot_platform.dto.sensor.DeleteSensorResponseDto;
 import com.learnings.iot_platform.dto.sensor.SensorResponseDto;
-import com.learnings.iot_platform.dto.sensor.SensorUpdateRequestDto;
+import com.learnings.iot_platform.dto.sensor.UpdateSensorRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.service.SensorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,30 +37,30 @@ public class SensorController {
     }
 
     @PostMapping
-    public ResponseEntity<SensorResponseDto> createSensor(@Valid @RequestBody SensorCreateRequestDto sensorCreateRequestDto) {
-        SensorResponseDto savedSensor = sensorService.createSensor(sensorCreateRequestDto);
+    public ResponseEntity<SensorResponseDto> createSensor(@Valid @RequestBody CreateSensorRequestDto createSensorRequestDto) {
+        SensorResponseDto savedSensor = sensorService.createSensor(createSensorRequestDto);
         return new ResponseEntity<>(savedSensor, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SensorDeleteResponseDto> deleteSensor(@PathVariable String id) {
+    public ResponseEntity<DeleteSensorResponseDto> deleteSensor(@PathVariable String id) {
         try {
             sensorService.deleteSensor(id);
-            SensorDeleteResponseDto deleteResponseDto = new SensorDeleteResponseDto("Sensor deleted with id: " + id);
+            DeleteSensorResponseDto deleteResponseDto = new DeleteSensorResponseDto("Sensor deleted with id: " + id);
 
-            return new ResponseEntity<>(new SensorDeleteResponseDto("Sensor deleted with id: " + id), HttpStatus.OK);
+            return new ResponseEntity<>(new DeleteSensorResponseDto("Sensor deleted with id: " + id), HttpStatus.OK);
         } catch(SensorNotFoundException e) {
-            return new ResponseEntity<>(new SensorDeleteResponseDto("Sensor not found with id: " + id), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new DeleteSensorResponseDto("Sensor not found with id: " + id), HttpStatus.NOT_FOUND);
         }
     }
 
     @PutMapping
-    public ResponseEntity<?> updateSensor(@Valid @RequestBody SensorUpdateRequestDto sensorUpdateRequestDto) {
+    public ResponseEntity<?> updateSensor(@Valid @RequestBody UpdateSensorRequestDto updateSensorRequestDto) {
         try {
-            SensorResponseDto sensorResponseDto = sensorService.updateSensor(sensorUpdateRequestDto);
+            SensorResponseDto sensorResponseDto = sensorService.updateSensor(updateSensorRequestDto);
             return new ResponseEntity<>(sensorResponseDto, HttpStatus.OK);
         } catch(SensorNotFoundException e) {
-            return new ResponseEntity<>(new ApiResponse("Sensor not found with id: " + sensorUpdateRequestDto.getSensorId()), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse("Sensor not found with id: " + updateSensorRequestDto.getSensorId()), HttpStatus.NOT_FOUND);
         }
     }
 

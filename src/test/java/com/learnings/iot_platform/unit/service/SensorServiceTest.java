@@ -1,8 +1,8 @@
 package com.learnings.iot_platform.unit.service;
 
-import com.learnings.iot_platform.dto.sensor.SensorCreateRequestDto;
+import com.learnings.iot_platform.dto.sensor.CreateSensorRequestDto;
 import com.learnings.iot_platform.dto.sensor.SensorResponseDto;
-import com.learnings.iot_platform.dto.sensor.SensorUpdateRequestDto;
+import com.learnings.iot_platform.dto.sensor.UpdateSensorRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.model.Sensor;
 import com.learnings.iot_platform.repository.SensorRepository;
@@ -37,10 +37,10 @@ public class SensorServiceTest {
 
     @Test
     void givenSensorDetails_whenSensorIsCreated_thenCallsRepositorySave(){
-        SensorCreateRequestDto sensorCreateRequestDto = new SensorCreateRequestDto("Sensor1", 25.5, 17, 78);
+        CreateSensorRequestDto createSensorRequestDto = new CreateSensorRequestDto("Sensor1", 25.5, 17, 78);
         when(sensorRepository.save(any(Sensor.class))).thenReturn(new Sensor("1", "Sensor1", 25.5, 17d, 78d, LocalDateTime.now(), LocalDateTime.now()));
 
-        sensorService.createSensor(sensorCreateRequestDto);
+        sensorService.createSensor(createSensorRequestDto);
 
         verify(sensorRepository, times(1)).save(any(Sensor.class));
     }
@@ -77,13 +77,13 @@ public class SensorServiceTest {
         String newSensorName = "sensor2";
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime updatedAt = LocalDateTime.now();
-        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, newSensorName, 25.5, 17d, 78d, createdAt, updatedAt);
+        UpdateSensorRequestDto updateSensorRequestDto = new UpdateSensorRequestDto(sensorId, newSensorName, 25.5, 17d, 78d, createdAt, updatedAt);
         Sensor sensor = new Sensor(sensorId, "sensor1", 25.5, 17d, 78d, createdAt, updatedAt);
         Sensor updatedSensor = new Sensor(sensorId, newSensorName, 25.5, 17d, 78d,createdAt, updatedAt);
         when(sensorRepository.findById(sensorId)).thenReturn(Optional.of(sensor));
         when(sensorRepository.save(any(Sensor.class))).thenReturn(updatedSensor);
 
-        SensorResponseDto updatedSensorResponseDto =  sensorService.updateSensor(sensorUpdateRequestDto);
+        SensorResponseDto updatedSensorResponseDto =  sensorService.updateSensor(updateSensorRequestDto);
 
         verify(sensorRepository, times(1)).findById(sensorId);
 
@@ -118,10 +118,10 @@ public class SensorServiceTest {
     @Test
     void givenInvalidSensorDetails_whenUpdatingSensor_thenThrowSensorNotFoundException() {
         String sensorId = "InvalidSensorId";
-        SensorUpdateRequestDto sensorUpdateRequestDto = new SensorUpdateRequestDto(sensorId, "sensor2", 25.5, 17d, 78d, LocalDateTime.now(), LocalDateTime.now());
+        UpdateSensorRequestDto updateSensorRequestDto = new UpdateSensorRequestDto(sensorId, "sensor2", 25.5, 17d, 78d, LocalDateTime.now(), LocalDateTime.now());
         when(sensorRepository.findById(sensorId)).thenReturn(Optional.empty());
 
-        assertThrows(SensorNotFoundException.class, () -> sensorService.updateSensor(sensorUpdateRequestDto));
+        assertThrows(SensorNotFoundException.class, () -> sensorService.updateSensor(updateSensorRequestDto));
     }
 
     @Test

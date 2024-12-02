@@ -1,4 +1,4 @@
-package com.learnings.iot_platform.service;
+package com.learnings.iot_platform.unit.service;
 
 import com.learnings.iot_platform.auth.JwtUtil;
 import com.learnings.iot_platform.dto.user.CreateUserDto;
@@ -6,6 +6,7 @@ import com.learnings.iot_platform.dto.user.LoginUserDto;
 import com.learnings.iot_platform.exception.UsernameAlreadyExistsException;
 import com.learnings.iot_platform.model.User;
 import com.learnings.iot_platform.repository.UserRepository;
+import com.learnings.iot_platform.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

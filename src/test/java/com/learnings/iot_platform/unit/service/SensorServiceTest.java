@@ -1,4 +1,4 @@
-package com.learnings.iot_platform.service;
+package com.learnings.iot_platform.unit.service;
 
 import com.learnings.iot_platform.dto.sensor.SensorCreateRequestDto;
 import com.learnings.iot_platform.dto.sensor.SensorResponseDto;
@@ -6,6 +6,7 @@ import com.learnings.iot_platform.dto.sensor.SensorUpdateRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.model.Sensor;
 import com.learnings.iot_platform.repository.SensorRepository;
+import com.learnings.iot_platform.service.SensorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

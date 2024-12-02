@@ -1,5 +1,6 @@
-package com.learnings.iot_platform.migrations;
+package com.learnings.iot_platform.unit.migrations;
 
+import com.learnings.iot_platform.migrations.InsertUsersToDatabaseChangelog;
 import com.learnings.iot_platform.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

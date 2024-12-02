@@ -82,3 +82,8 @@ fileignoreconfig:
 - filename: src/main/resources/application-integration-test.yml
   checksum: 10b874218249509c26406b632b15217568f417b95199f59d0248d7ab34b58f45
 version: ""
+
+fileignoreconfig:
+- filename: src/test/java/com/learnings/iot_platform/integration/UserIntegrationTestSuite.java
+  checksum: 61cd97d91384ad3658df55b3ec30b54ff57ed8b24f16a63f0b405533101d4cc5
+version: ""

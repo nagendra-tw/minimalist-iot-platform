@@ -1,6 +1,7 @@
-package com.learnings.iot_platform.exception_handling;
+package com.learnings.iot_platform.unit.exception_handling;
 
 import com.learnings.iot_platform.dto.ApiResponse;
+import com.learnings.iot_platform.exception_handling.GlobalExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;

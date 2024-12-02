@@ -17,7 +17,7 @@ public class JwtUtil {
     Dotenv dotenv = Dotenv.load();
     private final String JWT_SECRET;
 
-    JwtUtil() {
+    public JwtUtil() {
         JWT_SECRET = dotenv.get("JWT_SECRET");
     }
 

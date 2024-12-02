@@ -1,4 +1,4 @@
-package com.learnings.iot_platform.controller;
+package com.learnings.iot_platform.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.learnings.iot_platform.dto.sensor.SensorCreateRequestDto;

@@ -1,6 +1,7 @@
-package com.learnings.iot_platform.auth;
+package com.learnings.iot_platform.unit.auth;
 
 
+import com.learnings.iot_platform.auth.JwtUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.BeforeEach;

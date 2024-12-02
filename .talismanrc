@@ -64,3 +64,8 @@ fileignoreconfig:
 - filename: src/test/java/com/learnings/iot_platform/service/UserServiceTest.java
   checksum: 314232a0ccc8d8cedee5d753c0809a641db653d1634a05954eca9f388d96f8e8
 version: ""
+
+fileignoreconfig:
+- filename: src/test/java/com/learnings/iot_platform/exception_handling/GlobalExceptionHandlerTest.java
+  checksum: 78e65f2cb9eef804955cd9ab261021d563f25e300f59152befc4cb04e5c9035c
+version: ""

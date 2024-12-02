@@ -69,3 +69,12 @@ fileignoreconfig:
 - filename: src/test/java/com/learnings/iot_platform/exception_handling/GlobalExceptionHandlerTest.java
   checksum: 78e65f2cb9eef804955cd9ab261021d563f25e300f59152befc4cb04e5c9035c
 version: ""
+
+
+fileignoreconfig:
+- filename: src/test/java/com/learnings/iot_platform/migrations/InsertAdminToDatabaseChangelogTest.java
+  checksum: 837065ed34148396cb6aa764249fd93cc1947fa9e4389be89e4c0f7b983d450e
+- filename: src/test/java/com/learnings/iot_platform/migrations/InsertUsersToDatabaseChangelogTest.java
+  checksum: 34ff7ae9027128f50d818f6342661d286a1fc1403ae8107a02cbd5e337d7d2a9
+version: ""
+

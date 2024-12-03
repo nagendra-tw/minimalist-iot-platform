@@ -159,7 +159,7 @@ public class SensorControllerTest {
     void givenUpdatedSensor_whenSensorIsUpdated_thenReturnUpdatedSensor() throws Exception {
         String sensorId = "1";
         String newSensorName = "Sensor-v2.0";
-        UpdateSensorRequestDto updateSensorRequestDto = new UpdateSensorRequestDto(sensorId, "sensor1", 30,40,60, LocalDateTime.now(), LocalDateTime.now());
+        UpdateSensorRequestDto updateSensorRequestDto = new UpdateSensorRequestDto(sensorId, newSensorName, 30,40,60, LocalDateTime.now(), LocalDateTime.now());
         SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, newSensorName, 30, 40, 60, LocalDateTime.now(), LocalDateTime.now());
         when(sensorService.updateSensor(updateSensorRequestDto)).thenReturn(sensorResponseDto);
 

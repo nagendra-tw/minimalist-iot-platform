@@ -5,14 +5,12 @@ import com.learnings.iot_platform.dto.user.CreateUserDto;
 import com.learnings.iot_platform.dto.user.LoginUserDto;
 import com.learnings.iot_platform.model.User;
 import com.learnings.iot_platform.repository.UserRepository;
-import com.learnings.iot_platform.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +29,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,27 +54,21 @@ public class UserIntegrationTestSuite {
     }
 
     @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
+    @DynamicPropertySource
+    static void setMongoDBProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+    }
 
     @Test
     void testDatabaseConnection() {
         assertTrue(mongoDBContainer.isRunning(), "MongoDB test container should be running");
     }
 
-    @DynamicPropertySource
-    static void setMongoDBProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-    }
 
     @BeforeEach
     void setUp() {

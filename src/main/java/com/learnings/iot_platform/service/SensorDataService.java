@@ -1,6 +1,7 @@
 package com.learnings.iot_platform.service;
 
 import com.learnings.iot_platform.dto.sensordata.CreateSensorDataDto;
+import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.model.SensorData;
 import com.learnings.iot_platform.repository.SensorDataRepository;
 import com.learnings.iot_platform.repository.SensorRepository;
@@ -19,7 +20,12 @@ public class SensorDataService {
     }
 
     public void storeSensorData(CreateSensorDataDto createSensorDto) {
-        sensorDataRepository.save(mapCreateSensorDtoToSensorData(createSensorDto));
+        boolean isSensorPresent = sensorRepository.existsById(createSensorDto.getSensorId());
+        if (isSensorPresent) {
+            sensorDataRepository.save(mapCreateSensorDtoToSensorData(createSensorDto));
+        } else {
+            throw new SensorNotFoundException("Sensor not found with id: " + createSensorDto.getSensorId());
+        }
     }
 
     private SensorData mapCreateSensorDtoToSensorData(CreateSensorDataDto createSensorDto) {

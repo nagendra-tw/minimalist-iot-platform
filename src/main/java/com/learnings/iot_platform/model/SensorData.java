@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class SensorData {
     @Id
+    private String sensorDataId;
     private String sensorId;
     private Double temperature;
     private Double latitude;

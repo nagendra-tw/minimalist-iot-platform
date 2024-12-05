@@ -22,7 +22,8 @@ public class SensorDataService {
     public void storeSensorData(CreateSensorDataRequestDto createSensorDto) {
         boolean isSensorPresent = sensorRepository.existsById(createSensorDto.getSensorId());
         if (isSensorPresent) {
-            sensorDataRepository.save(mapCreateSensorDtoToSensorData(createSensorDto));
+            SensorData sensorData =  sensorDataRepository.save(mapCreateSensorDtoToSensorData(createSensorDto));
+            System.out.println(sensorData);
         } else {
             throw new SensorNotFoundException("Sensor not found with id: " + createSensorDto.getSensorId());
         }

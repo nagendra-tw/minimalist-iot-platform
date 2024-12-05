@@ -21,7 +21,6 @@ public class SensorDataService {
 
     public void storeSensorData(CreateSensorDataRequestDto createSensorDto) {
         boolean isSensorPresent = sensorRepository.existsById(createSensorDto.getSensorId());
-        System.out.println(isSensorPresent);
         if (isSensorPresent) {
             sensorDataRepository.save(mapCreateSensorDtoToSensorData(createSensorDto));
         } else {

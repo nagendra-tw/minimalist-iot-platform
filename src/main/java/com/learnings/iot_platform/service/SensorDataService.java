@@ -26,6 +26,8 @@ public class SensorDataService {
         } else {
             throw new SensorNotFoundException("Sensor not found with id: " + createSensorDto.getSensorId());
         }
+
+
     }
 
     private SensorData mapCreateSensorDtoToSensorData(CreateSensorDataRequestDto createSensorDto) {

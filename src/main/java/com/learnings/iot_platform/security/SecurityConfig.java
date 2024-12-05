@@ -42,6 +42,7 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.POST, "/sensors").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.PUT, "/sensors").hasRole("ADMIN")
                             .requestMatchers(HttpMethod.DELETE, "/sensors/{id}").hasRole("ADMIN")
+                            .requestMatchers(HttpMethod.POST, "/sensors-data/").hasAnyRole("ADMIN", "USER")
                             .anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

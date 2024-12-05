@@ -1,6 +1,6 @@
 package com.learnings.iot_platform.service;
 
-import com.learnings.iot_platform.dto.sensordata.CreateSensorDataDto;
+import com.learnings.iot_platform.dto.sensordata.CreateSensorDataRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.model.SensorData;
 import com.learnings.iot_platform.repository.SensorDataRepository;
@@ -19,8 +19,9 @@ public class SensorDataService {
         this.sensorRepository = sensorRepository;
     }
 
-    public void storeSensorData(CreateSensorDataDto createSensorDto) {
+    public void storeSensorData(CreateSensorDataRequestDto createSensorDto) {
         boolean isSensorPresent = sensorRepository.existsById(createSensorDto.getSensorId());
+        System.out.println(isSensorPresent);
         if (isSensorPresent) {
             sensorDataRepository.save(mapCreateSensorDtoToSensorData(createSensorDto));
         } else {
@@ -28,7 +29,7 @@ public class SensorDataService {
         }
     }
 
-    private SensorData mapCreateSensorDtoToSensorData(CreateSensorDataDto createSensorDto) {
+    private SensorData mapCreateSensorDtoToSensorData(CreateSensorDataRequestDto createSensorDto) {
         SensorData sensorData = new SensorData();
         sensorData.setSensorId(createSensorDto.getSensorId());
         sensorData.setLatitude(createSensorDto.getLatitude());

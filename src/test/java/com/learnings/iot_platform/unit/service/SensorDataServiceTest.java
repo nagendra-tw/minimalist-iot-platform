@@ -1,6 +1,6 @@
 package com.learnings.iot_platform.unit.service;
 
-import com.learnings.iot_platform.dto.sensordata.CreateSensorDataDto;
+import com.learnings.iot_platform.dto.sensordata.CreateSensorDataRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.model.SensorData;
 import com.learnings.iot_platform.repository.SensorDataRepository;
@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,7 +33,7 @@ public class SensorDataServiceTest {
 
     @Test
     void givenValidSensorDataDetails_whenSensorDataIsStored_thenCallsRepositorySave(){
-        CreateSensorDataDto createSensorDto = new CreateSensorDataDto();
+        CreateSensorDataRequestDto createSensorDto = new CreateSensorDataRequestDto();
         createSensorDto.setSensorId("random-sensor-id");
         createSensorDto.setLatitude(17d);
         createSensorDto.setLongitude(18d);
@@ -53,7 +51,7 @@ public class SensorDataServiceTest {
 
     @Test
     void givenSensorDataDetailsWithInvalidSensorId_whenSensorDataIsStored_thenThrowSensorNotFoundException(){
-        CreateSensorDataDto createSensorDto = new CreateSensorDataDto();
+        CreateSensorDataRequestDto createSensorDto = new CreateSensorDataRequestDto();
         createSensorDto.setSensorId("invalid-sensor-id");
         createSensorDto.setLatitude(17d);
         createSensorDto.setLongitude(18d);

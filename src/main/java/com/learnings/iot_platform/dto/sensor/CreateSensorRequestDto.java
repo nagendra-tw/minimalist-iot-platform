@@ -28,4 +28,8 @@ public class CreateSensorRequestDto {
     @Min(value = -180, message = "Latitude minimum value is -180")
     @Max(value = 180, message = "Latitude maximum value is 180")
     private double longitude;
+
+    public CreateSensorRequestDto() {
+
+    }
 }

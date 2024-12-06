@@ -27,6 +27,8 @@ public class SensorDataProducerService {
         sensorDataStoredEvent.setTemperature(sensorData.getTemperature());
         sensorDataStoredEvent.setLatitude(sensorData.getLatitude());
         sensorDataStoredEvent.setLongitude(sensorData.getLongitude());
+        sensorDataStoredEvent.setTimestamp(sensorData.getTimestamp());
+
 
         LOGGER.info("Going to publish sensor data stored event: {}", sensorDataStoredEvent);
 

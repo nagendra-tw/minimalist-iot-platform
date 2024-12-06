@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.learnings</groupId>
-	<artifactId>iot-platform</artifactId>
+	<artifactId>iot-platform-producer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>iot-platform</name>
 	<description>Demo project for Minimalist IOT Platform</description>

@@ -7,6 +7,12 @@ spring:
       host: localhost
       port: 27017
       database: iot-platform
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
 jwt:
   secret: ${JWT_SECRET}
 

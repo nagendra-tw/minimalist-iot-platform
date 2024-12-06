@@ -98,3 +98,10 @@ fileignoreconfig:
   checksum: cd9d7590248c999879e1b95302a3bc19a90815c9556d3851e766df758b9c6f95
 version: ""
 
+fileignoreconfig:
+- filename: src/main/resources/application.yml
+  checksum: f91c79f555dc72ef4d82e5f2f9bfb88d1237bf67079aa1302f41eeac1a7f20cb
+- filename: src/main/java/com/learnings/iot_platform/config/KafkaConfig.java
+  checksum: 672f26e127237365031047b4f8499e4497b68ae02a7d9773f3607a6252e4e24e
+version: ""
+

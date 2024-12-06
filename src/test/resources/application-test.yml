@@ -1,0 +1,5 @@
+spring:
+  kafka:
+    consumer:
+      group-id: sensor-data-stored-events
+      auto-offset-reset: earliest

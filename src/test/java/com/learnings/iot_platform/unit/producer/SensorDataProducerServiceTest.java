@@ -47,6 +47,7 @@ public class SensorDataProducerServiceTest {
         expectedEvent.setLatitude(sensorData.getLatitude());
         expectedEvent.setLongitude(sensorData.getLongitude());
         expectedEvent.setSensorId(sensorData.getSensorId());
+        expectedEvent.setTimestamp(sensorData.getTimestamp());
 
         sensorDataProducerService.produceSensorDataStoredEvent(sensorData);
 

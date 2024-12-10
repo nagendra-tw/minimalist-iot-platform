@@ -42,6 +42,7 @@ public class SensorDataProducerServiceTest {
         sensorData.setSensorDataId("1");
 
         SensorDataStoredEvent expectedEvent = new SensorDataStoredEvent();
+        expectedEvent.setSensorDataId(sensorData.getSensorDataId());
         expectedEvent.setBattery(sensorData.getBattery());
         expectedEvent.setTemperature(sensorData.getTemperature());
         expectedEvent.setLatitude(sensorData.getLatitude());

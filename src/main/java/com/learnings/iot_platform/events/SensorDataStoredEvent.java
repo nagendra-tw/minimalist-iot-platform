@@ -11,6 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SensorDataStoredEvent {
+    private String sensorDataId;
     private String sensorId;
     private double temperature;
     private double latitude;

@@ -1,0 +1,19 @@
+#spring.application.name=iot-platform
+spring:
+  application:
+    name: iot-platform
+  data:
+    mongodb:
+      host: mongo
+      port: 27017
+      database: iot-platform
+  kafka:
+    producer:
+      bootstrap-servers: kafka-1:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+
+mongock:
+  migration-scan-package:
+    - com.learnings.iot_platform.migrations

@@ -1,10 +1,8 @@
 package com.learnings.iot_platform.auth;
 
-import io.github.cdimascio.dotenv.Dotenv;
+//import io.github.cdimascio.dotenv.Dotenv;
+
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -14,11 +12,11 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    Dotenv dotenv = Dotenv.load();
-    private final String JWT_SECRET;
+    private String JWT_SECRET;
 
     public JwtUtil() {
-        JWT_SECRET = dotenv.get("JWT_SECRET");
+
+        JWT_SECRET = System.getenv("JWT_SECRET");
     }
 
     public String generateToken(Authentication authentication) {

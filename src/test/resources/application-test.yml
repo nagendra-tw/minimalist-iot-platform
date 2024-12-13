@@ -13,6 +13,5 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/integration-test-db
 
-
 mongock:
   enabled: false

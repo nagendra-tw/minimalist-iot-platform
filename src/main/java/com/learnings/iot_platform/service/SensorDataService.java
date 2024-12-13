@@ -9,6 +9,7 @@ import com.learnings.iot_platform.repository.SensorRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class SensorDataService {
@@ -22,7 +23,7 @@ public class SensorDataService {
         this.sensorDataProducerService = sensorDataProducerService;
     }
 
-    public void storeSensorData(CreateSensorDataRequestDto createSensorDto) {
+    public void storeSensorData(CreateSensorDataRequestDto createSensorDto) throws ExecutionException, InterruptedException {
         boolean isSensorPresent = sensorRepository.existsById(createSensorDto.getSensorId());
         if (isSensorPresent) {
             SensorData sensorData =  sensorDataRepository.save(mapCreateSensorDtoToSensorData(createSensorDto));

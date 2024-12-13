@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.ExecutionException;
+
 @RestController
 @RequestMapping("/sensors-data")
 public class SensorDataController {
@@ -29,6 +31,10 @@ public class SensorDataController {
         } catch (SensorNotFoundException e) {
             ApiResponse apiResponse = new ApiResponse(e.getMessage());
             return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }

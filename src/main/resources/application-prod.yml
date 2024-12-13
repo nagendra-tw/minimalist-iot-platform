@@ -9,7 +9,7 @@ spring:
       database: iot-platform
   kafka:
     producer:
-      bootstrap-servers: kafka-1:9092
+      bootstrap-servers: kafka-1:29092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 

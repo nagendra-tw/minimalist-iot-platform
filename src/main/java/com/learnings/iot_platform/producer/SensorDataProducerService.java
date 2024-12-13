@@ -34,29 +34,13 @@ public class SensorDataProducerService {
         sensorDataStoredEvent.setTimestamp(sensorData.getTimestamp());
         sensorDataStoredEvent.setSensorDataId(sensorData.getSensorDataId());
 
-
-        CompletableFuture<SendResult<String, SensorDataStoredEvent>> future = kafkaTemplate.send(
+        kafkaTemplate.send(
                 Constants.SENSOR_DATA_STORED_EVENT_TOPIC,
                 sensorData.getSensorId(),
                 sensorDataStoredEvent
         );
 
 
-        String sensorId = sensorData.getSensorId();
-
-        System.out.println("Sensor ID: " + sensorId);
-        System.out.println("String Hash Code: " + sensorId.hashCode());
-        System.out.println("Abs Hash Code: " + Math.abs(sensorId.hashCode()));
-        System.out.println("Partition (% 3): " + (Math.abs(sensorId.hashCode()) % 3));
-        System.out.println("---");
-
-
-        future.thenAccept(result ->
-                System.out.println("Sent message to partition: " + result.getRecordMetadata().partition())
-        ).exceptionally(ex -> {
-            System.err.println("Error sending message: " + ex);
-            return null;
-        });
 
         LOGGER.info("Published sensor data stored event: {}", sensorDataStoredEvent);
     }

@@ -1,5 +1,18 @@
+
+
 spring:
   kafka:
     consumer:
       group-id: sensor-data-stored-events
       auto-offset-reset: earliest
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/integration-test-db
+
+
+mongock:
+  enabled: false

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.core.env.Environment;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
@@ -28,6 +29,12 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.ContainerTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -35,8 +42,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @DirtiesContext
@@ -45,6 +51,7 @@ import static org.mockito.Mockito.when;
 @EmbeddedKafka(partitions = 3, count = 3, controlledShutdown = true)
 @SpringBootTest(properties = "spring.kafka.producer.bootstrap-servers=${spring.embedded.kafka.brokers}")
 @AutoConfigureMockMvc
+@Testcontainers
 public class SensorDataServiceIntegrationTest {
 
     @Autowired
@@ -62,8 +69,28 @@ public class SensorDataServiceIntegrationTest {
     private KafkaMessageListenerContainer<String, SensorDataStoredEvent> container;
     private BlockingQueue<ConsumerRecord<String, SensorDataStoredEvent>> records;
 
+
+    @Container
+    @ServiceConnection
+    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4")
+            .withExposedPorts(27017)
+            .waitingFor(Wait.forListeningPort());
+
+//    @DynamicPropertySource
+//    static void mongoProperties(DynamicPropertyRegistry registry) {
+//        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+//    }
+
+    @Test
+    void testDatabaseConnection() {
+        assertTrue(mongoDBContainer.isRunning(), "Mongodb container should be running");
+    }
+
+
     @BeforeAll
     void setUp() {
+        System.setProperty("spring.data.mongodb.uri", mongoDBContainer.getReplicaSetUrl());
+
         DefaultKafkaConsumerFactory<String, Object> consumerFactory = new DefaultKafkaConsumerFactory<>(getConsumerProperties());
         ContainerProperties containerProperties = new ContainerProperties(Constants.SENSOR_DATA_STORED_EVENT_TOPIC);
         container = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);

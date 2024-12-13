@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,7 +39,7 @@ public class SensorDataServiceTest {
     }
 
     @Test
-    void givenValidSensorDataDetails_whenSensorDataIsStored_thenCallsRepositorySave(){
+    void givenValidSensorDataDetails_whenSensorDataIsStored_thenCallsRepositorySave() throws ExecutionException, InterruptedException {
         CreateSensorDataRequestDto createSensorDto = new CreateSensorDataRequestDto();
         createSensorDto.setSensorId("random-sensor-id");
         createSensorDto.setLatitude(17d);
@@ -71,7 +72,7 @@ public class SensorDataServiceTest {
     }
 
     @Test
-    void givenSensorDataDetailsWithValidSensorId_whenSensorDataIsStored_thenProduceSensorDataStoredEvent(){
+    void givenSensorDataDetailsWithValidSensorId_whenSensorDataIsStored_thenProduceSensorDataStoredEvent() throws ExecutionException, InterruptedException {
         CreateSensorDataRequestDto createSensorDto = new CreateSensorDataRequestDto();
         createSensorDto.setSensorId("valid-sensor-id");
         createSensorDto.setLatitude(17d);

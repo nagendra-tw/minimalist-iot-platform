@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutionException;
 
 import static org.mockito.Mockito.*;
 
@@ -31,7 +32,7 @@ public class SensorDataProducerServiceTest {
     }
 
     @Test
-    void givenSensorData_whenSensorDataStored_thenProduceSensorDataStoredEvent() {
+    void givenSensorData_whenSensorDataStored_thenProduceSensorDataStoredEvent() throws ExecutionException, InterruptedException {
         SensorData sensorData = new SensorData();
         sensorData.setSensorId("valid-sensor-id");
         sensorData.setTemperature(50d);

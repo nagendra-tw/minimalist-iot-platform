@@ -31,6 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -73,7 +74,7 @@ public class SensorDataServiceIntegrationTest {
     }
 
     @Test
-    void givenCreateSensorDataDto_whenSensorDataStored_thenProduceSensorDataStoredEvent() throws InterruptedException {
+    void givenCreateSensorDataDto_whenSensorDataStored_thenProduceSensorDataStoredEvent() throws InterruptedException, ExecutionException {
         CreateSensorDataRequestDto createSensorDataRequestDto = new CreateSensorDataRequestDto();
         createSensorDataRequestDto.setSensorId("valid-sensor-id");
         createSensorDataRequestDto.setLatitude(17d);

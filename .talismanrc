@@ -109,3 +109,9 @@ fileignoreconfig:
 - filename: src/test/java/com/learnings/iot_platform/integration/SensorDataServiceIntegrationTest.java
   checksum: b435eaba2ff8dcb1d4285653357a79e064f69f637121f989a0fd3f306284f315
 version: ""
+
+
+fileignoreconfig:
+- filename: src/test/resources/application-test.yml
+  checksum: 7c63c765345deed5bf1435787c3f7f01877243048d9be5858b130304d851c65b
+version: ""

@@ -5,7 +5,9 @@ import com.learnings.iot_platform.dto.sensor.SensorResponseDto;
 import com.learnings.iot_platform.dto.sensor.UpdateSensorRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.model.Sensor;
+import com.learnings.iot_platform.repository.SensorDataRepository;
 import com.learnings.iot_platform.repository.SensorRepository;
+import com.learnings.iot_platform.service.SensorDataService;
 import com.learnings.iot_platform.service.SensorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,11 +30,17 @@ public class SensorServiceTest {
     private SensorService sensorService;
 
     @Mock
+    private SensorDataService sensorDataService;
+
+    @Mock
     private SensorRepository sensorRepository;
+
+    @Mock
+    private SensorDataRepository sensorDataRepository;
 
     @BeforeEach
     void setup(){
-        sensorService = new SensorService(sensorRepository);
+        sensorService = new SensorService(sensorRepository, sensorDataService);
     }
 
     @Test

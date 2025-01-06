@@ -5,19 +5,24 @@ import com.learnings.iot_platform.dto.sensor.SensorResponseDto;
 import com.learnings.iot_platform.dto.sensor.UpdateSensorRequestDto;
 import com.learnings.iot_platform.exception.SensorNotFoundException;
 import com.learnings.iot_platform.model.Sensor;
+import com.learnings.iot_platform.model.SensorData;
+import com.learnings.iot_platform.repository.SensorDataRepository;
 import com.learnings.iot_platform.repository.SensorRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SensorService {
 
+    private final SensorDataService sensorDataService;
     private SensorRepository sensorRepository;
 
-    public SensorService(SensorRepository sensorRepository) {
+    public SensorService(SensorRepository sensorRepository, SensorDataService sensorDataService) {
         this.sensorRepository = sensorRepository;
+        this.sensorDataService = sensorDataService;
     }
 
     public SensorResponseDto createSensor(CreateSensorRequestDto createSensorRequestDto) {
@@ -78,6 +83,7 @@ public class SensorService {
         sensorResponseDto.setLongitude(sensor.getLongitude());
         sensorResponseDto.setCreatedAt(sensor.getCreatedAt());
         sensorResponseDto.setUpdatedAt(sensor.getUpdatedAt());
+        sensorResponseDto.setSensorData(sensorDataService.getLatestSensorData(sensor.getId()));
         return sensorResponseDto;
     }
 

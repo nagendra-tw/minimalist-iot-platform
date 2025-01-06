@@ -1,5 +1,6 @@
 package com.learnings.iot_platform.dto.sensor;
 
+import com.learnings.iot_platform.model.SensorData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,5 @@ public class SensorResponseDto {
     private double longitude;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private SensorData sensorData;
 }

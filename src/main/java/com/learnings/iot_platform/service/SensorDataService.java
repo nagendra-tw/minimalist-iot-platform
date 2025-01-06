@@ -34,6 +34,10 @@ public class SensorDataService {
         }
     }
 
+    public SensorData getLatestSensorData(String sensorId) {
+        return sensorDataRepository.findTopBySensorIdOrderByTimestampDesc(sensorId).orElse(null);
+    }
+
     private SensorData mapCreateSensorDtoToSensorData(CreateSensorDataRequestDto createSensorDto) {
         SensorData sensorData = new SensorData();
         sensorData.setSensorId(createSensorDto.getSensorId());

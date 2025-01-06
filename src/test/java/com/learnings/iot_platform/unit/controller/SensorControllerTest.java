@@ -62,7 +62,7 @@ public class SensorControllerTest {
         double latitude = 17;
         double longitude = 18;
         CreateSensorRequestDto createSensorRequestDto = new CreateSensorRequestDto(sensorName, temperature, latitude, longitude);
-        SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, sensorName, temperature, latitude, longitude, LocalDateTime.now(), LocalDateTime.now());
+        SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, sensorName, temperature, latitude, longitude, LocalDateTime.now(), LocalDateTime.now(), null);
 
         when(sensorService.createSensor(any(CreateSensorRequestDto.class))).thenReturn(sensorResponseDto);
 
@@ -82,9 +82,9 @@ public class SensorControllerTest {
     @Test
     void shouldReturnAllSensors() throws Exception {
         List<SensorResponseDto> sensorResponseDtoList = new ArrayList<>();
-        sensorResponseDtoList.add(new SensorResponseDto("1", "sensor1", 50, 17, 18, LocalDateTime.now(), LocalDateTime.now()));
-        sensorResponseDtoList.add(new SensorResponseDto("2", "sensor2", 50, 17, 18, LocalDateTime.now(), LocalDateTime.now()));
-        sensorResponseDtoList.add(new SensorResponseDto("3", "sensor3", 50, 17, 18, LocalDateTime.now(), LocalDateTime.now()));
+        sensorResponseDtoList.add(new SensorResponseDto("1", "sensor1", 50, 17, 18, LocalDateTime.now(), LocalDateTime.now(), null));
+        sensorResponseDtoList.add(new SensorResponseDto("2", "sensor2", 50, 17, 18, LocalDateTime.now(), LocalDateTime.now(), null));
+        sensorResponseDtoList.add(new SensorResponseDto("3", "sensor3", 50, 17, 18, LocalDateTime.now(), LocalDateTime.now(), null));
 
         when(sensorService.getAllSensors()).thenReturn(sensorResponseDtoList);
 
@@ -130,7 +130,7 @@ public class SensorControllerTest {
     void givenSensorId_whenSensorIsRetrieved_thenReturnSensor() throws Exception {
         String sensorId = "1";
 
-        when(sensorService.getSensorById(sensorId)).thenReturn(new SensorResponseDto("1", "sensor1", 23d,43d,56.6d, LocalDateTime.now(), LocalDateTime.now()));
+        when(sensorService.getSensorById(sensorId)).thenReturn(new SensorResponseDto("1", "sensor1", 23d,43d,56.6d, LocalDateTime.now(), LocalDateTime.now(), null));
 
         mockMvc.perform(get("/sensors/{id}", sensorId))
                 .andExpect(status().isOk())
@@ -160,7 +160,7 @@ public class SensorControllerTest {
         String sensorId = "1";
         String newSensorName = "Sensor-v2.0";
         UpdateSensorRequestDto updateSensorRequestDto = new UpdateSensorRequestDto(sensorId, newSensorName, 30,40,60, LocalDateTime.now(), LocalDateTime.now());
-        SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, newSensorName, 30, 40, 60, LocalDateTime.now(), LocalDateTime.now());
+        SensorResponseDto sensorResponseDto = new SensorResponseDto(sensorId, newSensorName, 30, 40, 60, LocalDateTime.now(), LocalDateTime.now(), null);
         when(sensorService.updateSensor(updateSensorRequestDto)).thenReturn(sensorResponseDto);
 
         performAdminAuthentication();
